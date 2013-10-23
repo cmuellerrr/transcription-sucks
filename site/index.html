@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+	<title>Scriberrr - making transcription slightly less shitty.</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Scriberrr is here to help reduce the misery that is transcribing interviews. Free, open, and even available for you to download and use offline." />
+
+	<link rel="stylesheet" href="css/reset.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="js/jwerty.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div id="topBar">
+        <div id="nav">
+            <ul>
+                <li><a href id="audioNav"></a></li>
+                <li><a href id="videoNav"></a></li>
+                <li><a href id="settingsNav"></a></li>
+                <li><a href id="downloadNav"></a></li>
+            </ul>
+        </div>
+        <div id="commands">
+            <ul>
+                <li><a href id="pausePlay"><strong>esc</strong> - Pause/Play</a></li>
+                <li><a href id="rewind"><strong>alt+h</strong> - Rewind</a></li>
+            </ul>
+            <ul>
+                <li><a href id="timestamp"><strong>alt+t</strong> - Timestamp</a></li>
+                <li><a href id="slower"><strong>alt+j</strong> - Slower</a></li>
+            </ul>
+            <ul>
+                <li><a href id="bookmark"><strong>alt+b</strong> - Bookmark</a></li>
+                <li><a href id="faster"><strong>alt+k</strong> - Faster</a></li>
+            </ul>
+            <ul>
+                <li><a href id="screenshot"><strong>alt+s</strong> - Screenshot</a></li>
+                <li><a href id="forward"><strong>alt+l</strong> - Forward</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="audioBar">
+        <ul>
+            <li><input id="audioChooser" type="file"/></li>
+            <li><audio id="audioPlayer" controls preload="none"></audio></li>
+        </ul>        
+    </div>
+    <div id="videoBar">
+        
+    </div>
+    <div class="editor">
+        <textarea id="transcript"></textarea>
+    </div>
+    
+</div>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+body {
+	font-size: 13px;
+	background: #eee; 
+	font-family: "Trebuchet MS", Verdana, Arial;
+}
+
+strong {
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+#topBar {
+    height: 75px;
+    background-color: white;
+    border-bottom: solid #2ECC71 3px;
+}
+
+#nav {
+    display: inline-block;
+    margin-left: 100px;
+}
+
+#nav ul li {
+    display: inline-block;
+}
+
+#nav ul li a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-right: 75px;
+    background-size: 30px 30px;
+    background-repeat:no-repeat;
+}
+
+#audioNav {
+    background-image: url('../img/mic.svg');
+}
+
+#videoNav {
+    background-image: url('../img/camera.svg');
+}
+
+#settingsNav {
+    background-image: url('../img/gears.svg');
+}
+
+#downloadNav {
+    background-image: url('../img/download.svg');
+}
+
+#commands {
+    display: inline-block;
+    margin-left: 100px;
+    margin-top: 20px;
+}
+
+#commands ul {
+    display: inline-block;
+    margin-left: 50px;
+}
+
+#commands ul li {
+    margin-bottom: 10px;
+}
+
+#commands ul li a {
+    color: #7F8C8D;
+}
+
+#audioBar {
+    color: #ECF0F1;
+    height: 50px;
+}
+
+#audioBar ul li {
+    display: inline-block;
+}
+
+textarea {
+    width: 100%;
+    font-family: "Trebuchet MS", Verdana, Arial;
+    padding: 10px;
+    font-size: 13px;
+    min-height: 490px;
+    border: 1px solid #ccc;
+    line-height: 1.4em;
+}
