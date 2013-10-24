@@ -80,6 +80,16 @@ a {
     display: inline-block;
 }
 
+#videoBar {
+    color: #ECF0F1;
+    height: 200px;
+}
+
+#videoBar ul li {
+    display: inline-block;
+}
+
+
 textarea {
     width: 100%;
     font-family: "Trebuchet MS", Verdana, Arial;
