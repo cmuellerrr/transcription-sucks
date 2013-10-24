@@ -2,14 +2,18 @@ var seekDelta = 2,
     rateDelta = 0.2;
 
 
-
 $(document).ready(function() {
 
     var control = new Controller($('#audioPlayer')[0]);
     
+    //init file chooser bindings
+    $('#audioChooser').bind('change', loadFile);
+    $('#videoChooser').bind('change', loadFile);
+
     //init key bindings
     jwerty.key('esc', function() {control.togglePlay();});
     jwerty.key('alt+t', function() {control.timestamp();});
+    //jwerty.key('enter, enter', function() {control.timestamp();});
     jwerty.key('alt+b', bookmark);
     jwerty.key('alt+s', function() {control.screenshot();});
 
@@ -29,7 +33,19 @@ $(document).ready(function() {
     $('#forward').bind('click', function() {control.forward();});
     $('#slower').bind('click', function() {control.slowdown();});
     $('#faster').bind('click', function() {control.speedup();});
+
+    //TODO account for other browsers
+    function loadFile() {
+        var url = window.webkitURL.createObjectURL(this.files[0]);
+        
+        if (this.id === 'audioChooser') {
+            control.loadAudio(url);
+        } else if (this.id === 'videoChooser') {
+            control.loadVideo(url);
+        }
+    }
 });
+
 
 
 
@@ -44,16 +60,22 @@ function Controller(tag) {
  * Load the given audio file into the controller
  */
 Controller.prototype.loadAudio = function(url) {
+    console.log("Loading audio");
     this.media = $('#audioPlayer')[0];
     //load the file
+    this.media.src = url;
+    this.media.playbackRate = 1;
 };
 
 /*
  * Load the given video file into the controller
  */
 Controller.prototype.loadVideo = function(url) {
+    console.log("Loading video");
     this.media = $('#videoPlayer')[0];
     //load the file
+    this.media.src = url;
+    this.media.playbackRate = 1;
 };
 
 /*
@@ -125,7 +147,7 @@ Controller.prototype.timestamp = function() {
  * If currently playing a video, take a screenshot
  */
 Controller.prototype.screenshot = function() {
-    if (this.media.id === '#videoPlayer') {
+    if (this.media.id === 'videoPlayer') {
         console.log("SCREENSHOT");
     }
     return false;
