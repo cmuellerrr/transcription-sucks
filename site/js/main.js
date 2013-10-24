@@ -40,14 +40,25 @@ function Controller(tag) {
     this.media = tag;
 }
 
+/*
+ * Load the given audio file into the controller
+ */
 Controller.prototype.loadAudio = function(url) {
+    this.media = $('#audioPlayer')[0];
     //load the file
 };
 
+/*
+ * Load the given video file into the controller
+ */
 Controller.prototype.loadVideo = function(url) {
+    this.media = $('#videoPlayer')[0];
     //load the file
 };
 
+/*
+ * Toggle playback of the current media.
+ */
 Controller.prototype.togglePlay = function() {
     if(this.media.paused) {
         console.log("PLAY");
@@ -61,24 +72,36 @@ Controller.prototype.togglePlay = function() {
     return false;
 };
 
+/*
+ * Fast forward the current media by the set delta.
+ */
 Controller.prototype.forward = function() {
     console.log("FF");
     this.media.currentTime += seekDelta;
     return false;
 };
 
+/*
+ * Rewind the current media by the set delta
+ */
 Controller.prototype.rewind = function() {
     console.log("RW");
     this.media.currentTime -= seekDelta;
     return false;
 };
 
+/*
+ * Increase the current playback speed by the set delta
+ */
 Controller.prototype.speedup = function() {
     console.log("FASTER");
     this.media.playbackRate += rateDelta;
     return false;
 };
 
+/*
+ * Decrease the current playback speed by the set delta
+ */
 Controller.prototype.slowdown = function() {
     console.log("SLOWER");
     if (this.media.playbackRate >= (0.5 + rateDelta)) {
@@ -86,7 +109,10 @@ Controller.prototype.slowdown = function() {
     }
     return false;
 };
-        
+
+/*
+ * Add the current media's timestamp to the transcribed text
+ */
 Controller.prototype.timestamp = function() {
     console.log("TIMESTAMP");
     var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
@@ -95,6 +121,9 @@ Controller.prototype.timestamp = function() {
     return false;
 };
 
+/*
+ * If currently playing a video, take a screenshot
+ */
 Controller.prototype.screenshot = function() {
     if (this.media.id === '#videoPlayer') {
         console.log("SCREENSHOT");
@@ -102,6 +131,9 @@ Controller.prototype.screenshot = function() {
     return false;
 };
 
+/*
+ * Place a bookmark on the current line being transcribed
+ */
 var bookmark = function() {
     console.log("BOOKMARK");
     return false;
@@ -111,6 +143,9 @@ var bookmark = function() {
 
 /* Utilitiy Functions */
 
+/*
+ * Format the given number of seconds as hh:mm:ss
+ */
 var formatSecondsAsTime = function(secs) {
     var hr  = Math.floor(secs / 3600),
         min = Math.floor((secs - (hr * 3600))/60),
