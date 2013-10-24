@@ -1,4 +1,6 @@
-var control;
+var seekDelta = 2,
+    rateDelta = 0.2,
+    control;
 
 $(document).ready(function() {
 
@@ -50,6 +52,7 @@ Controller.prototype.loadVideo = function(url) {
 
 Controller.prototype.togglePlay = function() {
     if(this.media.paused) {
+        //Rewind a little after pausing
         this.media.currentTime -= 0.5;
         this.media.play();
     } else {
@@ -59,23 +62,23 @@ Controller.prototype.togglePlay = function() {
 };
 
 Controller.prototype.forward = function() {
-    this.media.currentTime += 2;
+    this.media.currentTime += seekDelta;
     return false;
 };
 
 Controller.prototype.rewind = function() {
-    this.media.currentTime -= 2;
+    this.media.currentTime -= seekDelta;
     return false;
 };
 
 Controller.prototype.speedup = function() {
-    this.media.playbackRate += 0.2;
+    this.media.playbackRate += rateDelta;
     return false;
 };
 
 Controller.prototype.slowdown = function() {
-    if (this.media.playbackRate >= 0.52) {
-        this.media.playbackRate = this.media.playbackRate - 0.2;
+    if (this.media.playbackRate >= (0.5 + rateDelta) {
+        this.media.playbackRate = this.media.playbackRate - rateDelta;
     }
     return false;
 };
