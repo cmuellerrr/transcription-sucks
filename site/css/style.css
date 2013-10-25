@@ -74,26 +74,62 @@ a {
     color: #7F8C8D;
 }
 
+#audioChooser, #videoChooser {
+    display: none;
+}
+
+#audioChooseNav, #videoChooseNav {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-right: 15px;
+    background-image: url('../img/upload.svg');
+    background-size: 25px 25px;
+    background-repeat:no-repeat;
+}
+
+/*For some reason the video isn't aligning like the audio */
+#videoChooseNav {
+    padding-bottom: 6px;
+}
+
 #audioBar {
     display: none;
     background-color: #ECF0F1;
     height: 40px;
 }
 
+#audioBar ul {
+    margin-left: 135px;
+    padding-top: 6px;
+}
+
 #audioBar ul li {
     display: inline-block;
+}
+
+#audioPlayer {
+    width: 800px;
 }
 
 #videoBar {
     display: none;
     background-color: #ECF0F1;
-    height: 200px;
+    height: 270px;
+}
+
+#videoBar ul {
+    margin-left: 135px;
+    padding-top: 10px;
 }
 
 #videoBar ul li {
     display: inline-block;
 }
 
+#videoPlayer {
+    height: 250px;
+}
 
 textarea {
     width: 100%;

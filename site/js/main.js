@@ -6,10 +6,22 @@ $(document).ready(function() {
 
     var control = new Controller($('#audioPlayer')[0]);
     
+    //init nav bindings
+    $('#audioNav').click(toggleAudioBar);
+    $('#videoNav').click(toggleVideoBar);
+
     //init file chooser bindings
     $('#audioChooser').bind('change', loadFile);
+    $('#audioChooseNav').click(function() {
+        $('#audioChooser').click();
+        return false;
+    });
     $('#videoChooser').bind('change', loadFile);
-
+    $('#videoChooseNav').click(function() {
+        $('#videoChooser').click();
+        return false;
+    });
+    
     //init key bindings
     jwerty.key('esc', function() {control.togglePlay();});
     jwerty.key('alt+h', function() {control.timestamp();});
@@ -33,9 +45,6 @@ $(document).ready(function() {
     $('#forward').click(function() {return control.forward();});
     $('#slower').click(function() {return control.slowdown();});
     $('#faster').click(function() {return control.speedup();});
-
-    $('#audioNav').click(toggleAudioBar);
-    $('#videoNav').click(toggleVideoBar);
 
     //TODO account for other browsers
     function loadFile() {
@@ -84,6 +93,7 @@ function Controller(tag) {
 
 /*
  * Load the given audio file into the controller
+ * TODO speed this up
  */
 Controller.prototype.loadAudio = function(url) {
     console.log("Loading audio");
@@ -100,8 +110,8 @@ Controller.prototype.loadVideo = function(url) {
     console.log("Loading video");
     this.media = $('#videoPlayer')[0];
     //load the file
-    this.media.src = url;
-    this.media.playbackRate = 1;
+    //this.media.src = url;
+    //this.media.playbackRate = 1;
 };
 
 /*
@@ -111,7 +121,9 @@ Controller.prototype.togglePlay = function() {
     if(this.media.paused) {
         console.log("PLAY");
         //Rewind a little after pausing
-        this.media.currentTime -= 0.5;
+        if (this.media.currentTime >= 0.5) {
+            this.media.currentTime -= 0.5;
+        }
         this.media.play();
     } else {
         console.log("PAUSE");
