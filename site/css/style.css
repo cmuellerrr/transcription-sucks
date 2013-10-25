@@ -13,14 +13,16 @@ a {
 }
 
 #topBar {
-    height: 75px;
+    height: 50px;
     background-color: white;
     border-bottom: solid #2ECC71 3px;
 }
 
 #nav {
-    display: inline-block;
+    display: block;
+    float: left;
     margin-left: 100px;
+    padding-top: 10px;
 }
 
 #nav ul li {
@@ -31,7 +33,7 @@ a {
     display: block;
     width: 30px;
     height: 30px;
-    margin-right: 75px;
+    margin-right: 40px;
     background-size: 30px 30px;
     background-repeat:no-repeat;
 }
@@ -53,17 +55,18 @@ a {
 }
 
 #commands {
-    display: inline-block;
-    margin-left: 100px;
-    margin-top: 20px;
+    display: block;
+    float: right;
+    margin-right: 100px;
+    padding-top: 7px;
 }
 
 #commands ul {
     display: inline-block;
-    margin-left: 50px;
+    margin-left: 25px;
 }
 
-#commands ul li {
+#commands ul li:first-child {
     margin-bottom: 10px;
 }
 
@@ -72,8 +75,9 @@ a {
 }
 
 #audioBar {
-    color: #ECF0F1;
-    height: 50px;
+    display: none;
+    background-color: #ECF0F1;
+    height: 40px;
 }
 
 #audioBar ul li {
@@ -81,7 +85,8 @@ a {
 }
 
 #videoBar {
-    color: #ECF0F1;
+    display: none;
+    background-color: #ECF0F1;
     height: 200px;
 }
 

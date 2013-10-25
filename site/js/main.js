@@ -12,27 +12,30 @@ $(document).ready(function() {
 
     //init key bindings
     jwerty.key('esc', function() {control.togglePlay();});
-    jwerty.key('alt+t', function() {control.timestamp();});
+    jwerty.key('alt+h', function() {control.timestamp();});
     //jwerty.key('enter, enter', function() {control.timestamp();});
     jwerty.key('alt+b', bookmark);
-    jwerty.key('alt+s', function() {control.screenshot();});
+    jwerty.key('alt+n', function() {control.screenshot();});
 
-    jwerty.key('alt+h', function() {control.rewind();});
-    jwerty.key('alt+j', function() {control.slowdown();});
-    jwerty.key('alt+k', function() {control.speedup();});
-    jwerty.key('alt+l', function() {control.forward();});
+    jwerty.key('alt+j', function() {control.rewind();});
+    jwerty.key('alt+k', function() {control.forward();});
+    jwerty.key('alt+l', function() {control.slowdown();});
+    jwerty.key('alt+;', function() {control.speedup();});
 
 
     //init mouse bindings
-    $('#pausePlay').bind('click', function() {control.togglePlay();});
-    $('#timestamp').bind('click', function() {control.timestamp();});
-    $('#bookmark').bind('click', bookmark);
-    $('#screenshot').bind('click', function() {control.screenshot();});
+    $('#pausePlay').click(function() {return control.togglePlay();});
+    $('#timestamp').click(function() {return control.timestamp();});
+    $('#bookmark').click(bookmark);
+    $('#screenshot').click(function() {return control.screenshot();});
 
-    $('#rewind').bind('click', function() {control.rewind();});
-    $('#forward').bind('click', function() {control.forward();});
-    $('#slower').bind('click', function() {control.slowdown();});
-    $('#faster').bind('click', function() {control.speedup();});
+    $('#rewind').click(function() {return control.rewind();});
+    $('#forward').click(function() {return control.forward();});
+    $('#slower').click(function() {return control.slowdown();});
+    $('#faster').click(function() {return control.speedup();});
+
+    $('#audioNav').click(toggleAudioBar);
+    $('#videoNav').click(toggleVideoBar);
 
     //TODO account for other browsers
     function loadFile() {
@@ -47,6 +50,29 @@ $(document).ready(function() {
 });
 
 
+var toggleAudioBar = function() {
+    var bar = $('#audioBar');
+    if (bar.css('display') == 'none') {
+        $('#videoBar').slideUp('fast', function() {
+            bar.slideDown('fast');
+        });
+    } else {
+        bar.slideUp('fast');
+    }
+    return false;
+};
+
+var toggleVideoBar = function() {
+    var bar = $('#videoBar');
+    if (bar.css('display') == 'none') {
+        $('#audioBar').slideUp('fast', function() {
+            bar.slideDown('fast');
+        });
+    } else {
+        bar.slideUp('fast');
+    }
+    return false;
+};
 
 
 
