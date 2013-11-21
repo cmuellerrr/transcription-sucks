@@ -10,7 +10,7 @@ $(document).ready(function() {
     audioHeight = $("#audioBar").height();
     videoHeight = $("#videoBar").height();
 
-    //$('.editor').css('max-height', ($(window).height() - commandHeight) + 'px');
+    resizeEditor();
 
     var control = new Controller($('#audioPlayer')[0]);
     
@@ -65,6 +65,8 @@ $(document).ready(function() {
             control.loadVideo(url);
         }
     }
+
+    $( window ).resize(resizeEditor);
 });
 
 var toggleNavTray = function() {
@@ -82,9 +84,10 @@ var toggleAudioBar = function() {
     if (bar.css('display') == 'none') {
         $('#videoBar').slideUp('fast', function() {
             bar.slideDown('fast');
+            resizeEditor();
         });
     } else {
-        bar.slideUp('fast');
+        bar.slideUp('fast', resizeEditor);
     }
     return false;
 };
@@ -94,9 +97,10 @@ var toggleVideoBar = function() {
     if (bar.css('display') == 'none') {
         $('#audioBar').slideUp('fast', function() {
             bar.slideDown('fast');
+            resizeEditor();
         });
     } else {
-        bar.slideUp('fast');
+        bar.slideUp('fast', resizeEditor);
     }
     return false;
 };
@@ -237,4 +241,23 @@ var formatSecondsAsTime = function(secs) {
     }
 
     return hr + ':' + min + ':' + sec;
+};
+
+/*
+ * Set the maximum size of the editor to be the full screen size.
+ * Takes into account the currenctly visible toolbars.
+ *
+ * TODO: There's this weird offset that still needs to be applied - not
+ * immediately apparent what it is coming from.
+ */
+var resizeEditor = function() {
+    var winHeight = $(window).height(),
+        barHeight = 0,
+        weirdOffset = 14;
+
+    if ($('#commandBar').css('display') != 'none') barHeight += commandHeight;
+    if ($('#audioBar').css('display') != 'none') barHeight += audioHeight;
+    if ($('#videoBar').css('display') != 'none') barHeight += videoHeight;
+
+    $('.editor').css('max-height', (winHeight - barHeight - weirdOffset) + 'px');
 };
