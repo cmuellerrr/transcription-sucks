@@ -174,8 +174,8 @@ textarea {
     -moz-box-sizing: border-box;    /* For Firefox                          */
     box-sizing: border-box;         /* For IE and modern versions of Chrome */
     font-family: Verdana, Arial;
-    padding: 10px;
-    font-size: 18px;
+    padding: 20px;
+    font-size: 20px;
     min-height: 490px;
     line-height: 1.4em;
     resize: none;
