@@ -5,7 +5,7 @@ html, body, .container {
 body {
 	font-size: 13px;
 	background: #fff; 
-	font-family: "Trebuchet MS", Verdana, Arial;
+	font-family: Verdana, Arial;
 }
 
 strong {
@@ -31,7 +31,6 @@ button:focus {
     top: 20px;
     right: 20px;
     width: 50px;
-    background-color: #191919;
 }
 
 #navLogo {
@@ -43,7 +42,7 @@ button:focus {
     font-weight: bold;
     text-align: center;
     color: white;
-    background-color: #191919;
+    background-color: #FC5B5B;
     cursor: pointer;
 }
 
@@ -65,8 +64,8 @@ button:focus {
     display: block;
     width: 30px;
     height: 30px;
-    margin: 15px 10px;
-    background-size: 30px 30px;
+    margin: 15px 13px;
+    background-size: 24px 24px;
     background-repeat:no-repeat;
 }
 
@@ -90,7 +89,7 @@ button:focus {
 
 #commandBar {
     display: block;
-    padding: 5px;
+    padding: 5px 0 5px 25px;
     background-color: #ECF0F1;
 }
 
@@ -174,7 +173,7 @@ textarea {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;    /* For Firefox                          */
     box-sizing: border-box;         /* For IE and modern versions of Chrome */
-    font-family: "Trebuchet MS", Verdana, Arial;
+    font-family: Verdana, Arial;
     padding: 10px;
     font-size: 18px;
     min-height: 490px;

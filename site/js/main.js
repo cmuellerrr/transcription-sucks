@@ -11,6 +11,7 @@ $(document).ready(function() {
     videoHeight = $("#videoBar").height();
 
     resizeEditor();
+    $( window ).resize(resizeEditor);
 
     var control = new Controller($('#audioPlayer')[0]);
     
@@ -64,9 +65,9 @@ $(document).ready(function() {
         } else if (this.id === 'videoChooser') {
             control.loadVideo(url);
         }
-    }
 
-    $( window ).resize(resizeEditor);
+        $('#transcript').focus();
+    }
 });
 
 var toggleNavTray = function() {
