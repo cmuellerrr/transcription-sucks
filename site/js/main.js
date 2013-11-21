@@ -1,12 +1,21 @@
 var seekDelta = 2,
-    rateDelta = 0.2;
+    rateDelta = 0.2,
+    commandHeight,
+    audioHeight,
+    videoHeight;
 
 
 $(document).ready(function() {
+    commandHeight = $("#commandBar").height();
+    audioHeight = $("#audioBar").height();
+    videoHeight = $("#videoBar").height();
+
+    //$('.editor').css('max-height', ($(window).height() - commandHeight) + 'px');
 
     var control = new Controller($('#audioPlayer')[0]);
     
     //init nav bindings
+    $('#navLogo').click(toggleNavTray);
     $('#audioNav').click(toggleAudioBar);
     $('#videoNav').click(toggleVideoBar);
 
@@ -58,6 +67,15 @@ $(document).ready(function() {
     }
 });
 
+var toggleNavTray = function() {
+    var tray = $('#navTray');
+    if (tray.css('display') == 'none') {
+        tray.slideDown('fast');
+    } else {
+        tray.slideUp('fast');
+    }
+    return false;
+};
 
 var toggleAudioBar = function() {
     var bar = $('#audioBar');
@@ -176,7 +194,7 @@ Controller.prototype.slowdown = function() {
 Controller.prototype.timestamp = function() {
     console.log("TIMESTAMP");
     var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
-    $('#transcript').val($('#transcript').val() + '\n\n' + stamp + " -- ");
+    $('#transcript').val($('#transcript').val() + '\n\n' + "[" + stamp + "] -- ");
     $('#transcript').scrollTop($('#transcript')[0].scrollHeight);
     return false;
 };

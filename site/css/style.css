@@ -1,6 +1,10 @@
+html, body, .container {
+    height: 100%;
+}
+
 body {
 	font-size: 13px;
-	background: #eee; 
+	background: #fff; 
 	font-family: "Trebuchet MS", Verdana, Arial;
 }
 
@@ -12,28 +16,56 @@ a {
     text-decoration: none;
 }
 
-#topBar {
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+
+/** Navigation **/
+
+#siteNav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    background-color: #191919;
+}
+
+#navLogo {
+    width: 100%;
     height: 50px;
-    background-color: white;
-    border-bottom: solid #2ECC71 3px;
+    z-index: 700;
+    border: 0;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    background-color: #191919;
+    cursor: pointer;
 }
 
-#nav {
-    display: block;
-    float: left;
-    margin-left: 100px;
-    padding-top: 10px;
+#navTray {
+    display: none;
+    width: 100%;
+    background-color: #505050;
 }
 
-#nav ul li {
+#navTray ul {
+    padding-top: 20px;
+}
+
+#navTray ul li {
     display: inline-block;
 }
 
-#nav ul li a {
+#navTray ul li a {
     display: block;
     width: 30px;
     height: 30px;
-    margin-right: 40px;
+    margin: 15px 10px;
     background-size: 30px 30px;
     background-repeat:no-repeat;
 }
@@ -54,23 +86,21 @@ a {
     background-image: url('../img/download.svg');
 }
 
-#commands {
+/** Toolbars **/
+
+#commandBar {
     display: block;
-    float: right;
-    margin-right: 100px;
-    padding-top: 7px;
+    padding: 5px;
+    background-color: #ECF0F1;
 }
 
-#commands ul {
+#commandBar ul li {
     display: inline-block;
-    margin-left: 25px;
+    margin-right: 20px;
 }
 
-#commands ul li:first-child {
-    margin-bottom: 10px;
-}
-
-#commands ul li a {
+#commandBar ul li a {
+    display: block;
     color: #7F8C8D;
 }
 
@@ -131,12 +161,24 @@ a {
     height: 250px;
 }
 
+/** Editor **/
+
+.editor {
+    width: 100%;
+    height: 100%; 
+}
+
 textarea {
     width: 100%;
+    height: 100%; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
     font-family: "Trebuchet MS", Verdana, Arial;
     padding: 10px;
-    font-size: 13px;
+    font-size: 18px;
     min-height: 490px;
-    border: 1px solid #ccc;
     line-height: 1.4em;
+    resize: none;
+    border: none;
 }
