@@ -1,17 +1,14 @@
 var seekDelta = 2,
-    rateDelta = 0.2,
-    commandHeight,
-    audioHeight,
-    videoHeight;
+    rateDelta = 0.2;
 
 
 $(document).ready(function() {
-    commandHeight = $("#commandBar").height();
-    audioHeight = $("#audioBar").height();
-    videoHeight = $("#videoBar").height();
-
     resizeEditor();
     $( window ).resize(resizeEditor);
+
+    //$(".lined").linedtextarea({
+    //    selectedClass: 'marked'
+    //});
 
     var control = new Controller($('#audioPlayer')[0]);
     
@@ -256,9 +253,9 @@ var resizeEditor = function() {
         barHeight = 0,
         weirdOffset = 14;
 
-    if ($('#commandBar').css('display') != 'none') barHeight += commandHeight;
-    if ($('#audioBar').css('display') != 'none') barHeight += audioHeight;
-    if ($('#videoBar').css('display') != 'none') barHeight += videoHeight;
+    if ($('#commandBar').css('display') != 'none') barHeight += $("#commandBar").height();
+    if ($('#audioBar').css('display') != 'none') barHeight += $("#audioBar").height();
+    if ($('#videoBar').css('display') != 'none') barHeight += $("#videoBar").height();
 
     $('.editor').css('max-height', (winHeight - barHeight - weirdOffset) + 'px');
 };
