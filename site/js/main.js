@@ -6,10 +6,6 @@ $(document).ready(function() {
     resizeEditor();
     $( window ).resize(resizeEditor);
 
-    //$(".lined").linedtextarea({
-    //    selectedClass: 'marked'
-    //});
-
     var control = new Controller($('#audioPlayer')[0]);
     
     //init nav bindings
@@ -81,8 +77,7 @@ var toggleAudioBar = function() {
     var bar = $('#audioBar');
     if (bar.css('display') == 'none') {
         $('#videoBar').slideUp('fast', function() {
-            bar.slideDown('fast');
-            resizeEditor();
+            bar.slideDown('fast', resizeEditor);
         });
     } else {
         bar.slideUp('fast', resizeEditor);
@@ -94,8 +89,7 @@ var toggleVideoBar = function() {
     var bar = $('#videoBar');
     if (bar.css('display') == 'none') {
         $('#audioBar').slideUp('fast', function() {
-            bar.slideDown('fast');
-            resizeEditor();
+            bar.slideDown('fast', resizeEditor);
         });
     } else {
         bar.slideUp('fast', resizeEditor);
