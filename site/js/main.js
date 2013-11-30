@@ -3,9 +3,6 @@ var seekDelta = 2,
 
 
 $(document).ready(function() {
-    resizeEditor();
-    $( window ).resize(resizeEditor);
-
     var control = new Controller($('#audioPlayer')[0]);
     
     //init nav bindings
@@ -126,6 +123,10 @@ Controller.prototype.loadVideo = function(url) {
     //this.media.playbackRate = 1;
 };
 
+
+
+/** Source playback functions **/
+
 /*
  * Toggle playback of the current media.
  */
@@ -231,23 +232,4 @@ var formatSecondsAsTime = function(secs) {
     }
 
     return hr + ':' + min + ':' + sec;
-};
-
-/*
- * Set the maximum size of the editor to be the full screen size.
- * Takes into account the currenctly visible toolbars.
- *
- * TODO: There's this weird offset that still needs to be applied - not
- * immediately apparent what it is coming from.
- */
-var resizeEditor = function() {
-    var winHeight = $(window).height(),
-        barHeight = 0,
-        weirdOffset = 14;
-
-    if ($('#commandBar').css('display') != 'none') barHeight += $("#commandBar").height();
-    if ($('#audioBar').css('display') != 'none') barHeight += $("#audioBar").height();
-    if ($('#videoBar').css('display') != 'none') barHeight += $("#videoBar").height();
-
-    $('.editor').css('max-height', (winHeight - barHeight - weirdOffset) + 'px');
-};
+}

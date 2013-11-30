@@ -69,14 +69,6 @@ button:focus {
     background-repeat:no-repeat;
 }
 
-#audioNav {
-    background-image: url('../img/mic.svg');
-}
-
-#videoNav {
-    background-image: url('../img/camera.svg');
-}
-
 #settingsNav {
     background-image: url('../img/gears.svg');
 }
@@ -85,7 +77,25 @@ button:focus {
     background-image: url('../img/download.svg');
 }
 
-/** Toolbars **/
+
+
+
+/** General **/
+
+.container {
+    position: relative;
+    max-width: 800px;
+    margin: auto;
+}
+
+
+
+/** The Source bar - holds the audio/video players **/
+
+.source {
+    position: absolute;
+    background-color: red;
+}
 
 #commandBar {
     display: none;
@@ -103,37 +113,18 @@ button:focus {
     color: #7F8C8D;
 }
 
-
 #audioBar {
     display: none;
     height: 40px;
 }
 
-#audioBar ul {
-    margin-left: 135px;
-    padding-top: 6px;
-}
-
-#audioBar ul li {
-    display: inline-block;
-}
-
 #audioPlayer {
-    width: 700px;
+    width: 800px;
 }
 
 #videoBar {
     display: none;
     height: 270px;
-}
-
-#videoBar ul {
-    margin-left: 135px;
-    padding-top: 10px;
-}
-
-#videoBar ul li {
-    display: inline-block;
 }
 
 #videoPlayer {
@@ -142,17 +133,7 @@ button:focus {
 
 
 
-
-.container {
-    position: relative;
-    max-width: 700px;
-    margin: auto;
-}
-
-.source {
-    position: absolute;
-    background-color: red;
-}
+/** The editor portion **/
 
 .editor {
     padding-top: 100px;
@@ -178,6 +159,10 @@ button:focus {
 #videoChooseNav {
     background-image: url('../img/camera.svg');
 }
+
+
+
+/** The transcript text **/
 
 .tTitle {
     font-size: 35px;
