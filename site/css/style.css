@@ -73,6 +73,10 @@ button:focus {
     background-image: url('../img/gears.svg');
 }
 
+#exportNav {
+    background-image: url('../img/download.svg');
+}
+
 #downloadNav {
     background-image: url('../img/download.svg');
 }
@@ -120,15 +124,6 @@ button:focus {
 
 #audioPlayer {
     width: 800px;
-}
-
-#videoBar {
-    display: none;
-    height: 270px;
-}
-
-#videoPlayer {
-    height: 250px;
 }
 
 
