@@ -47,7 +47,7 @@ button:focus {
 }
 
 #navTray {
-    display: none;
+
     width: 100%;
     background-color: #5E5E5E;
 }
@@ -88,7 +88,7 @@ button:focus {
 /** Toolbars **/
 
 #commandBar {
-    display: block;
+    display: none;
     padding: 5px 0 5px 25px;
     background-color: #ECF0F1;
 }
@@ -103,28 +103,9 @@ button:focus {
     color: #7F8C8D;
 }
 
-#audioChooser, #videoChooser {
-    display: none;
-}
-
-#audioChooseNav, #videoChooseNav {
-    display: block;
-    width: 25px;
-    height: 25px;
-    margin-right: 15px;
-    background-image: url('../img/upload.svg');
-    background-size: 25px 25px;
-    background-repeat:no-repeat;
-}
-
-/*For some reason the video isn't aligning like the audio */
-#videoChooseNav {
-    padding-bottom: 6px;
-}
 
 #audioBar {
     display: none;
-    background-color: #ECF0F1;
     height: 40px;
 }
 
@@ -138,12 +119,11 @@ button:focus {
 }
 
 #audioPlayer {
-    width: 800px;
+    width: 700px;
 }
 
 #videoBar {
     display: none;
-    background-color: #ECF0F1;
     height: 270px;
 }
 
@@ -160,23 +140,62 @@ button:focus {
     height: 250px;
 }
 
-/** Editor **/
 
-.editor {
-    width: 100%;
-    height: 100%; 
+
+
+.container {
+    position: relative;
+    max-width: 700px;
+    margin: auto;
 }
 
-textarea {
-    width: 100%;
-    height: 100%; 
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;    /* For Firefox                          */
-    box-sizing: border-box;         /* For IE and modern versions of Chrome */
-    font-family: Verdana, Arial;
-    padding: 20px;
+.source {
+    position: absolute;
+    background-color: red;
+}
+
+.editor {
+    padding-top: 100px;
+}
+
+#audioChooser, #videoChooser {
+    display: none;
+}
+
+#audioChooseNav, #videoChooseNav {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin: 0 15px 15px 0;
+    background-size: 40px 40px;
+    background-repeat:no-repeat;
+}
+
+#audioChooseNav {
+    background-image: url('../img/mic.svg');
+}
+
+#videoChooseNav {
+    background-image: url('../img/camera.svg');
+}
+
+.tTitle {
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.tSubTitle {
+    font-size: 22px;
+    font-style: italic;
+    margin-bottom: 50px;
+}
+
+.tText {
     font-size: 20px;
-    line-height: 1.4em;
-    border: none;
-    resize: none;
+    margin-bottom: 25px;
+}
+
+.tText .tStamp {
+    font-weight: bold;
 }

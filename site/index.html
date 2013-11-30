@@ -14,47 +14,50 @@
 
 <body>
 
-<div class="container">
-    <div id="siteNav">
-        <button id="navLogo"><span class="logo">Sr<span></button>
-        <div id="navTray">
-            <ul>
-                <li><a href id="audioNav"></a></li>
-                <li><a href id="videoNav"></a></li>
-                <li><a href id="settingsNav"></a></li>
-                <li><a href id="downloadNav"/></a></li>
-            </ul>
-        </div>
-    </div>
-    <div id="commandBar">
+<div id="siteNav">
+    <button id="navLogo"><span class="logo">Sr<span></button>
+    <div id="navTray">
         <ul>
-            <li><a href id="pausePlay"><strong>esc</strong> - Pause/Play</a></li>
-            <li><a href id="timestamp"><strong>alt+h</strong> - Timestamp</a></li>
-            <li><a href id="rewind"><strong>alt+j</strong> - Rewind</a></li>
-            <li><a href id="slower"><strong>alt+l</strong> - Slower</a></li>
-            <li><a href id="forward"><strong>alt+k</strong> - Forward</a></li>
-            <li><a href id="faster"><strong>alt+;</strong> - Faster</a></li>
-            <li><a href id="bookmark"><strong>alt+b</strong> - Bookmark</a></li>            
-            <li><a href id="screenshot"><strong>alt+n</strong> - Screenshot</a></li>
-            
+            <li><a href id="settingsNav"></a></li>
+            <li><a href id="exportNav"/></a></li>
+            <li><a href id="downloadNav"/></a></li>
         </ul>
-    </div>
-    <div id="audioBar">
-        <ul>
-            <li><input id="audioChooser" type="file"/><a href id="audioChooseNav"></a></li>
-            <li><audio id="audioPlayer" controls preload="none"></audio></li>
-        </ul>        
-    </div>
-    <div id="videoBar">
-        <ul>
-            <li><input id="videoChooser" type="file"/><a href id="videoChooseNav"></a></li>
-            <li><video id="videoPlayer" controls></video></li>
-        </ul>
-    </div>
-    <div class="editor">
-        <textarea id="transcript" placeholder="Use the menu to the right to select your source material and use this area to transcribe."></textarea>
     </div>
 </div>
+
+<div class="container">
+
+    <div class="source">
+        <div id="commandBar">
+            <ul>
+                <li><a href id="pausePlay"><strong>esc</strong> - Pause/Play</a></li>
+                <li><a href id="timestamp"><strong>alt+h</strong> - Timestamp</a></li>
+                <li><a href id="rewind"><strong>alt+j</strong> - Jump Back</a></li>
+                <li><a href id="forward"><strong>alt+k</strong> - Jump Ahead</a></li>
+                <li><a href id="slower"><strong>alt+l</strong> - Slower</a></li>
+                <li><a href id="faster"><strong>alt+;</strong> - Faster</a></li>
+                <li><a href id="bookmark"><strong>alt+b</strong> - Bookmark</a></li>
+                <li><a href id="screenshot"><strong>alt+n</strong> - Screenshot</a></li>          
+            </ul>
+        </div>
+        <div id="audioBar">
+            <audio id="audioPlayer" controls preload="none"></audio>
+        </div>
+        <div id="videoBar">
+            <video id="videoPlayer" controls></video>
+        </div>
+    </div>
+    
+    <div class="editor">
+        <span><input id="audioChooser" type="file"/><a href id="audioChooseNav"></a></span>
+        <span><input id="videoChooser" type="file"/><a href id="videoChooseNav"></a></span>
+        <h1 class="tTitle">Title your transcript</h1>
+        <h2 class="tSubTitle">Say when it happened</h1>
+        <p class="tText">Type up what they said</p>
+    </div>
+</div>
+
 <script type="text/javascript" src="js/main.js"></script>
+
 </body>
 </html>

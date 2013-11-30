@@ -10,8 +10,6 @@ $(document).ready(function() {
     
     //init nav bindings
     $('#navLogo').click(toggleNavTray);
-    $('#audioNav').click(toggleAudioBar);
-    $('#videoNav').click(toggleVideoBar);
 
     //init file chooser bindings
     $('#audioChooser').bind('change', loadFile);
@@ -190,7 +188,7 @@ Controller.prototype.slowdown = function() {
 Controller.prototype.timestamp = function() {
     console.log("TIMESTAMP");
     var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
-    $('#transcript').val($('#transcript').val() + '\n\n' + "[" + stamp + "] -- ");
+    $('#transcript').val($('#transcript').val() + '\n\n' + "[" + stamp + "] " + "\u2013 ");
     $('#transcript').scrollTop($('#transcript')[0].scrollHeight);
     return false;
 };
