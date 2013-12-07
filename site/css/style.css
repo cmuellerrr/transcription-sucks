@@ -5,7 +5,15 @@ html, body, .container {
 body {
 	font-size: 13px;
 	background: #fff; 
-	font-family: Verdana, Arial;
+	font-family: Arial;
+}
+
+h1, h2 {
+    font-family: Arial;
+}
+
+p {
+    font-family: Georgia;
 }
 
 strong {
@@ -98,7 +106,6 @@ button:focus {
 
 .source {
     position: absolute;
-    background-color: red;
 }
 
 #commandBar {
@@ -118,7 +125,6 @@ button:focus {
 }
 
 #audioBar {
-    display: none;
     height: 40px;
 }
 
@@ -134,11 +140,11 @@ button:focus {
     padding-top: 100px;
 }
 
-#audioChooser, #videoChooser {
+#audioChooser {
     display: none;
 }
 
-#audioChooseNav, #videoChooseNav {
+#audioChooseNav {
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -149,10 +155,6 @@ button:focus {
 
 #audioChooseNav {
     background-image: url('../img/mic.svg');
-}
-
-#videoChooseNav {
-    background-image: url('../img/camera.svg');
 }
 
 
@@ -174,6 +176,16 @@ button:focus {
 .tText {
     font-size: 20px;
     margin-bottom: 25px;
+}
+
+.tTitle, .tSubTitle, .tText {
+    outline: 0;
+    word-wrap: break-word;
+}
+
+.tTitle:after, .tSubTitle:after, .tText:after {
+    content: attr(data-ghost-text);
+    color: #c0c0c0;
 }
 
 .tText .tStamp {

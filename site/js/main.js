@@ -14,11 +14,6 @@ $(document).ready(function() {
         $('#audioChooser').click();
         return false;
     });
-    $('#videoChooser').bind('change', loadFile);
-    $('#videoChooseNav').click(function() {
-        $('#videoChooser').click();
-        return false;
-    });
     
     //init key bindings
     jwerty.key('esc', function() {control.togglePlay();});
@@ -72,10 +67,10 @@ var toggleAudioBar = function() {
     var bar = $('#audioBar');
     if (bar.css('display') == 'none') {
         $('#videoBar').slideUp('fast', function() {
-            bar.slideDown('fast', resizeEditor);
+            bar.slideDown('fast');
         });
     } else {
-        bar.slideUp('fast', resizeEditor);
+        bar.slideUp('fast');
     }
     return false;
 };
@@ -84,10 +79,10 @@ var toggleVideoBar = function() {
     var bar = $('#videoBar');
     if (bar.css('display') == 'none') {
         $('#audioBar').slideUp('fast', function() {
-            bar.slideDown('fast', resizeEditor);
+            bar.slideDown('fast');
         });
     } else {
-        bar.slideUp('fast', resizeEditor);
+        bar.slideUp('fast');
     }
     return false;
 };
