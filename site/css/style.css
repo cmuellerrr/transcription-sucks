@@ -129,7 +129,8 @@ button:focus {
 }
 
 #audioPlayer {
-    width: 800px;
+    width: 800px;    
+    padding: 5px 0;
 }
 
 
@@ -183,7 +184,7 @@ button:focus {
     word-wrap: break-word;
 }
 
-.tTitle:after, .tSubTitle:after, .tText:after {
+.empty:after {
     content: attr(data-ghost-text);
     color: #c0c0c0;
 }

@@ -1,16 +1,23 @@
 var seekDelta = 2,
     rateDelta = 0.2;
 
-
 $(document).ready(function() {
     var control = new Controller($('#audioPlayer')[0]);
     
+    //init placeholders
+    $('.tTitle').keyup(handleGhostText);
+    $('.tTitle').focusout(handleGhostText);
+    $('.tSubTitle').keyup(handleGhostText);
+    $('.tSubTitle').focusout(handleGhostText);
+    $('.tText').keyup(handleGhostText);
+    $('.tText').focusout(handleGhostText);
+
     //init nav bindings
     $('#navLogo').click(toggleNavTray);
 
     //init file chooser bindings
-    $('#audioChooser').bind('change', loadFile);
-    $('#audioChooseNav').click(function() {
+    $('#audioChooser').change(loadFile);
+    $('#audioChooseNav').click(function(event) {
         $('#audioChooser').click();
         return false;
     });
@@ -210,6 +217,27 @@ var bookmark = function() {
 
 
 /* Utilitiy Functions */
+
+/**
+ * Handle the use of ghost text for the titles and first paragraph.
+ * If text is entered, remove the ghost text, if there is no text
+ * when the field loses focus, put it back.
+ */
+var handleGhostText = function(event) {
+    var target = $(event.target);
+    var len = target.text().length;
+    if (event.type === "focusout") {
+        if (len === 0 && !target.hasClass("empty")) {
+            //show :after
+            target.addClass("empty");
+        }
+    } else {
+        if (len !== 0 && target.hasClass("empty")) {
+            //get rid of :after
+            target.removeClass("empty");
+        }
+    }
+};
 
 /*
  * Format the given number of seconds as hh:mm:ss
