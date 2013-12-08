@@ -191,8 +191,12 @@ Controller.prototype.slowdown = function() {
 Controller.prototype.timestamp = function() {
     console.log("TIMESTAMP");
     var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
-    $('#transcript').val($('#transcript').val() + '\n\n' + "[" + stamp + "] " + "\u2013 ");
-    $('#transcript').scrollTop($('#transcript')[0].scrollHeight);
+
+    //TODO think about giving each p a unique id
+    $(".editor").append('<p class="tText" contenteditable="true">[' + stamp + '] \u2013 </p>');
+    setEndOfContenteditable($(".tText").last().get(0));
+    window.scrollTo(0,document.body.scrollHeight);
+
     return false;
 };
 
@@ -218,10 +222,12 @@ var bookmark = function() {
 
 /* Utilitiy Functions */
 
-/**
+/*
  * Handle the use of ghost text for the titles and first paragraph.
  * If text is entered, remove the ghost text, if there is no text
  * when the field loses focus, put it back.
+ *
+ * TODO if deleting from tText, move up to the previous one
  */
 var handleGhostText = function(event) {
     var target = $(event.target);
@@ -240,6 +246,31 @@ var handleGhostText = function(event) {
 };
 
 /*
+ * Sets the cursor to the end of a content editable area.
+ * via Nico Burns: http://stackoverflow.com/a/3866442
+ */
+function setEndOfContenteditable(contentEditableElement)
+{
+    var range,selection;
+    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    {
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    else if(document.selection)//IE 8 and lower
+    {
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection
+    }
+}
+
+/*
  * Format the given number of seconds as hh:mm:ss
  */
 var formatSecondsAsTime = function(secs) {
@@ -255,4 +286,4 @@ var formatSecondsAsTime = function(secs) {
     }
 
     return hr + ':' + min + ':' + sec;
-}
+};

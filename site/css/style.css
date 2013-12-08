@@ -35,7 +35,7 @@ button:focus {
 /** Navigation **/
 
 #siteNav {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
     width: 50px;
@@ -55,7 +55,6 @@ button:focus {
 }
 
 #navTray {
-
     width: 100%;
     background-color: #5E5E5E;
 }
@@ -105,7 +104,9 @@ button:focus {
 /** The Source bar - holds the audio/video players **/
 
 .source {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    background-color: white;
 }
 
 #commandBar {
@@ -138,7 +139,7 @@ button:focus {
 /** The editor portion **/
 
 .editor {
-    padding-top: 100px;
+    padding: 100px 0;
 }
 
 #audioChooser {
