@@ -26,16 +26,15 @@ $(document).ready(function() {
     });
     
     //init key bindings
-    jwerty.key('esc', function() {control.togglePlay();});
-    jwerty.key('alt+h', function() {control.timestamp();});
-    //jwerty.key('enter, enter', function() {control.timestamp();});
+    jwerty.key('esc', control.togglePlay, control);
+    jwerty.key('alt+h', timestamp);
     jwerty.key('alt+b', bookmark);
-    jwerty.key('alt+n', function() {control.screenshot();});
+    jwerty.key('alt+n', control.screenshot, control);
 
-    jwerty.key('alt+j', function() {control.rewind();});
-    jwerty.key('alt+k', function() {control.forward();});
-    jwerty.key('alt+l', function() {control.slowdown();});
-    jwerty.key('alt+;', function() {control.speedup();});
+    jwerty.key('alt+j', control.rewind, control);
+    jwerty.key('alt+k', control.forward, control);
+    jwerty.key('alt+l', control.slowdown, control);
+    jwerty.key('alt+;', control.speedup, control);
 
     //TODO account for other browsers
     function loadFile() {
@@ -86,8 +85,145 @@ var toggleVideoBar = function() {
 };
 
 
+/*
+ * Add the current media's timestamp to the transcribed text.
+ * Add a new section after the currently focused one with the 
+ * current timestamp and focus on that one.
+ */
+var timestamp = function() {
+    var stamp = control.getTimestamp();
+    var id = "t" + (++tCount);
+
+    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">[' + stamp + '] \u2013 </p>');
+    $('#' + id).keydown(handleText);
+    
+    setEndOfContenteditable($('#' + id).get(0));
+    //TODO this is going to cause problems if a timestamp is added in the middle of a document
+    window.scrollTo(0, document.body.scrollHeight);
+
+    return false;
+};
+
+/*
+ * Place a bookmark on the current line being transcribed
+ */
+var bookmark = function() {
+    return false;
+};
+
+
+
+/* Utilitiy Functions */
+
+
+/*
+ * Handle the use of ghost text for the titles and first paragraph.
+ * If text is entered, remove the ghost text, if there is no text
+ * when the field loses focus, put it back.
+ */
+var handleGhostText = function(event) {
+    var target = $(event.target);
+    var len = target.text().length;
+    if (event.type === "focusout") {
+        if (len === 0 && !target.hasClass("empty")) {
+            //show :after
+            target.addClass("empty");
+        }
+    } else {
+        if (event.charCode && target.hasClass("empty")) {
+            //get rid of :after
+            target.removeClass("empty");
+            if (target.attr('class') === "tText") {
+                //TODO add timestamp
+            }
+        }
+    }
+};
+
+/*
+ * Handle special cases for input on the text sections.
+ * Mainly just looking at enter and backspace.
+ */
+var handleText = function(event) {
+    var target = $(event.target);
+
+    //Delete back into the previous section
+    if (event.keyCode == 8 &&
+        target.text().length === 0 &&
+        target.attr('id') !== $(".tText").first().attr('id')) {
+        
+        deleteSection(target);
+        return false;
+
+    //Timestamp on enter
+    } else if (event.keyCode == 13) {
+        timestamp();
+        return false;
+    }
+
+    //TODO handle arrow keys
+};
+
+/*
+ * Remove the given section and set the focus to the previous
+ * one.
+ *
+ * EXPECTING A JQUERY OBJECT
+ */
+var deleteSection = function(objectToRemove) {
+    setEndOfContenteditable(objectToRemove.prev().get(0));
+    objectToRemove.remove();
+};
+
+/*
+ * Sets the cursor to the end of a content editable area.
+ * via Nico Burns: http://stackoverflow.com/a/3866442
+ *
+ * EXPECTS A DOM ELEMENT
+ */
+var setEndOfContenteditable = function(contentEditableElement)
+{
+    var range,selection;
+    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    {
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    else if(document.selection)//IE 8 and lower
+    {
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection
+    }
+};
+
+/*
+ * Format the given number of seconds as hh:mm:ss
+ */
+var formatSecondsAsTime = function(secs) {
+    var hr  = Math.floor(secs / 3600),
+        min = Math.floor((secs - (hr * 3600))/60),
+        sec = Math.floor(secs - (hr * 3600) -  (min * 60));
+
+    if (min < 10) {
+      min = "0" + min;
+    }
+    if (sec < 10) {
+      sec  = "0" + sec;
+    }
+
+    return hr + ':' + min + ':' + sec;
+};
+
+
 
 /** The media Controller object **/
+
 
 function Controller(tag) {
     this.media = tag;
@@ -178,148 +314,19 @@ Controller.prototype.slowdown = function() {
 };
 
 /*
- * Add the current media's timestamp to the transcribed text.
- * Add a new section after the currently focused one with the 
- * current timestamp and focus on that one.
+ * Get the current time stamp of the playing media.
  */
-Controller.prototype.timestamp = function() {
-    console.log("TIMESTAMP");
-    var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
-    var id = "t" + (++tCount);
-
-    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">[' + stamp + '] \u2013 </p>');
-    $('#' + id).keydown(handleText);
-    
-    setEndOfContenteditable($('#' + id).get(0));
-    //TODO this is going to cause problems if a timestamp is added in the middle of a document
-    window.scrollTo(0, document.body.scrollHeight);
-
-    return false;
+Controller.prototype.getTimestamp = function() {
+    console.log("GET TIMESTAMP");
+    return formatSecondsAsTime(Math.floor(this.media.currentTime));
 };
 
 /*
  * If currently playing a video, take a screenshot
  */
-Controller.prototype.screenshot = function() {
+Controller.prototype.getScreenshot = function() {
     if (this.media.id === 'videoPlayer') {
-        console.log("SCREENSHOT");
+        console.log("GET SCREENSHOT");
     }
     return false;
-};
-
-/*
- * Place a bookmark on the current line being transcribed
- */
-var bookmark = function() {
-    console.log("BOOKMARK");
-    return false;
-};
-
-
-
-/* Utilitiy Functions */
-
-
-/*
- * Handle the use of ghost text for the titles and first paragraph.
- * If text is entered, remove the ghost text, if there is no text
- * when the field loses focus, put it back.
- */
-var handleGhostText = function(event) {
-    var target = $(event.target);
-    var len = target.text().length;
-    if (event.type === "focusout") {
-        if (len === 0 && !target.hasClass("empty")) {
-            //show :after
-            target.addClass("empty");
-        }
-    } else {
-        if (event.charCode && target.hasClass("empty")) {
-            //get rid of :after
-            target.removeClass("empty");
-            if (target.attr('class') === "tText") {
-                //TODO add timestamp
-            }
-        }
-    }
-};
-
-/*
- * Handle special cases for input on the text sections.
- * Mainly just looking at enter and backspace.
- */
-var handleText = function(event) {
-    var target = $(event.target);
-
-    //Delete back into the previous section
-    if (event.keyCode == 8 &&
-        target.text().length === 0 &&
-        target.attr('id') !== $(".tText").first().attr('id')) {
-        
-        deleteSection(target);
-        return false;
-
-    //Timestamp on enter
-    } else if (event.keyCode == 13) {
-        control.timestamp();
-        return false;
-    }
-
-    //TODO handle arrow keys
-};
-
-/*
- * Remove the given section and set the focus to the previous
- * one.
- *
- * EXPECTING A JQUERY OBJECT
- */
-var deleteSection = function(objectToRemove) {
-    setEndOfContenteditable(objectToRemove.prev().get(0));
-    objectToRemove.remove();
-};
-
-/*
- * Sets the cursor to the end of a content editable area.
- * via Nico Burns: http://stackoverflow.com/a/3866442
- *
- * EXPECTS A DOM ELEMENT
- */
-var setEndOfContenteditable = function(contentEditableElement)
-{
-    var range,selection;
-    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-    {
-        range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);//make the range you have just created the visible selection
-    }
-    else if(document.selection)//IE 8 and lower
-    {
-        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection
-    }
-};
-
-/*
- * Format the given number of seconds as hh:mm:ss
- */
-var formatSecondsAsTime = function(secs) {
-    var hr  = Math.floor(secs / 3600),
-        min = Math.floor((secs - (hr * 3600))/60),
-        sec = Math.floor(secs - (hr * 3600) -  (min * 60));
-
-    if (min < 10) {
-      min = "0" + min;
-    }
-    if (sec < 10) {
-      sec  = "0" + sec;
-    }
-
-    return hr + ':' + min + ':' + sec;
 };
