@@ -1,7 +1,8 @@
 var seekDelta = 2,
     rateDelta = 0.2,
-    tCount = 0;
-var control;
+    jumpBuffer = 0.5,
+    tCount = 0,
+    control;
 
 $(document).ready(function() {
     control = new Controller($('#audioPlayer')[0]);
@@ -91,10 +92,10 @@ var toggleVideoBar = function() {
  * current timestamp and focus on that one.
  */
 var timestamp = function() {
-    var stamp = control.getTimestamp();
+    var stamp = '[' + formatSecondsAsTime(control.getTimestamp()) + '] \u2013 ';
     var id = "t" + (++tCount);
 
-    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">[' + stamp + '] \u2013 </p>');
+    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">' + stamp + '</p>');
     $('#' + id).keydown(handleText);
     
     setEndOfContenteditable($('#' + id).get(0));
@@ -264,8 +265,8 @@ Controller.prototype.togglePlay = function() {
     if(this.media.paused) {
         console.log("PLAY");
         //Rewind a little after pausing
-        if (this.media.currentTime >= 0.5) {
-            this.media.currentTime -= 0.5;
+        if (this.media.currentTime >= jumpBuffer) {
+            this.media.currentTime -= jumpBuffer;
         }
         this.media.play();
     } else {
@@ -285,11 +286,21 @@ Controller.prototype.forward = function() {
 };
 
 /*
- * Rewind the current media by the set delta
+ * Rewind the current media by the set delta.
  */
 Controller.prototype.rewind = function() {
     console.log("RW");
     this.media.currentTime -= seekDelta;
+    return false;
+};
+
+/*
+ * Jump to the given location.
+ */
+Controller.prototype.jumpTo = function(time) {
+    contole.log("JUMP");
+    if (time >= jumpBuffer) time -= jumpBuffer;
+    if (this.media.duration >= time) this.media.currentTime = time;
     return false;
 };
 
@@ -318,7 +329,7 @@ Controller.prototype.slowdown = function() {
  */
 Controller.prototype.getTimestamp = function() {
     console.log("GET TIMESTAMP");
-    return formatSecondsAsTime(Math.floor(this.media.currentTime));
+    return Math.floor(this.media.currentTime);
 };
 
 /*
