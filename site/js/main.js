@@ -1,16 +1,19 @@
 var seekDelta = 2,
-    rateDelta = 0.2;
+    rateDelta = 0.2,
+    tCount = 0;
+var control;
 
 $(document).ready(function() {
-    var control = new Controller($('#audioPlayer')[0]);
+    control = new Controller($('#audioPlayer')[0]);
     
     //init placeholders
-    $('.tTitle').keyup(handleGhostText);
+    $('.tTitle').keypress(handleGhostText);
     $('.tTitle').focusout(handleGhostText);
-    $('.tSubTitle').keyup(handleGhostText);
+    $('.tSubTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
-    $('.tText').keyup(handleGhostText);
+    $('.tText').keypress(handleGhostText);
     $('.tText').focusout(handleGhostText);
+    $('.tText').keydown(handleText);
 
     //init nav bindings
     $('#navLogo').click(toggleNavTray);
@@ -33,18 +36,6 @@ $(document).ready(function() {
     jwerty.key('alt+k', function() {control.forward();});
     jwerty.key('alt+l', function() {control.slowdown();});
     jwerty.key('alt+;', function() {control.speedup();});
-
-
-    //init mouse bindings
-    $('#pausePlay').click(function() {return control.togglePlay();});
-    $('#timestamp').click(function() {return control.timestamp();});
-    $('#bookmark').click(bookmark);
-    $('#screenshot').click(function() {return control.screenshot();});
-
-    $('#rewind').click(function() {return control.rewind();});
-    $('#forward').click(function() {return control.forward();});
-    $('#slower').click(function() {return control.slowdown();});
-    $('#faster').click(function() {return control.speedup();});
 
     //TODO account for other browsers
     function loadFile() {
@@ -129,6 +120,7 @@ Controller.prototype.loadVideo = function(url) {
 
 /** Source playback functions **/
 
+
 /*
  * Toggle playback of the current media.
  */
@@ -186,16 +178,21 @@ Controller.prototype.slowdown = function() {
 };
 
 /*
- * Add the current media's timestamp to the transcribed text
+ * Add the current media's timestamp to the transcribed text.
+ * Add a new section after the currently focused one with the 
+ * current timestamp and focus on that one.
  */
 Controller.prototype.timestamp = function() {
     console.log("TIMESTAMP");
     var stamp = formatSecondsAsTime(Math.floor(this.media.currentTime));
+    var id = "t" + (++tCount);
 
-    //TODO think about giving each p a unique id
-    $(".editor").append('<p class="tText" contenteditable="true">[' + stamp + '] \u2013 </p>');
-    setEndOfContenteditable($(".tText").last().get(0));
-    window.scrollTo(0,document.body.scrollHeight);
+    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">[' + stamp + '] \u2013 </p>');
+    $('#' + id).keydown(handleText);
+    
+    setEndOfContenteditable($('#' + id).get(0));
+    //TODO this is going to cause problems if a timestamp is added in the middle of a document
+    window.scrollTo(0, document.body.scrollHeight);
 
     return false;
 };
@@ -222,12 +219,11 @@ var bookmark = function() {
 
 /* Utilitiy Functions */
 
+
 /*
  * Handle the use of ghost text for the titles and first paragraph.
  * If text is entered, remove the ghost text, if there is no text
  * when the field loses focus, put it back.
- *
- * TODO if deleting from tText, move up to the previous one
  */
 var handleGhostText = function(event) {
     var target = $(event.target);
@@ -238,18 +234,58 @@ var handleGhostText = function(event) {
             target.addClass("empty");
         }
     } else {
-        if (len !== 0 && target.hasClass("empty")) {
+        if (event.charCode && target.hasClass("empty")) {
             //get rid of :after
             target.removeClass("empty");
+            if (target.attr('class') === "tText") {
+                //TODO add timestamp
+            }
         }
     }
 };
 
 /*
+ * Handle special cases for input on the text sections.
+ * Mainly just looking at enter and backspace.
+ */
+var handleText = function(event) {
+    var target = $(event.target);
+
+    //Delete back into the previous section
+    if (event.keyCode == 8 &&
+        target.text().length === 0 &&
+        target.attr('id') !== $(".tText").first().attr('id')) {
+        
+        deleteSection(target);
+        return false;
+
+    //Timestamp on enter
+    } else if (event.keyCode == 13) {
+        control.timestamp();
+        return false;
+    }
+
+    //TODO handle arrow keys
+};
+
+/*
+ * Remove the given section and set the focus to the previous
+ * one.
+ *
+ * EXPECTING A JQUERY OBJECT
+ */
+var deleteSection = function(objectToRemove) {
+    setEndOfContenteditable(objectToRemove.prev().get(0));
+    objectToRemove.remove();
+};
+
+/*
  * Sets the cursor to the end of a content editable area.
  * via Nico Burns: http://stackoverflow.com/a/3866442
+ *
+ * EXPECTS A DOM ELEMENT
  */
-function setEndOfContenteditable(contentEditableElement)
+var setEndOfContenteditable = function(contentEditableElement)
 {
     var range,selection;
     if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
@@ -268,7 +304,7 @@ function setEndOfContenteditable(contentEditableElement)
         range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
         range.select();//Select the range (make it the visible selection
     }
-}
+};
 
 /*
  * Format the given number of seconds as hh:mm:ss

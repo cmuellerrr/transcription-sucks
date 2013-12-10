@@ -109,22 +109,6 @@ button:focus {
     background-color: white;
 }
 
-#commandBar {
-    display: none;
-    padding: 5px 0 5px 25px;
-    background-color: #ECF0F1;
-}
-
-#commandBar ul li {
-    display: inline-block;
-    margin-right: 20px;
-}
-
-#commandBar ul li a {
-    display: block;
-    color: #7F8C8D;
-}
-
 #audioBar {
     height: 40px;
 }
