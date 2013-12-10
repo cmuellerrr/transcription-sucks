@@ -1,7 +1,7 @@
 var seekDelta = 2,
     rateDelta = 0.2,
     jumpBuffer = 0.5,
-    tCount = 0,
+    sectionCount = 0,
     control;
 
 $(document).ready(function() {
@@ -92,13 +92,14 @@ var toggleVideoBar = function() {
  * current timestamp and focus on that one.
  */
 var timestamp = function() {
-    var stamp = '[' + formatSecondsAsTime(control.getTimestamp()) + '] \u2013 ';
-    var id = "t" + (++tCount);
+    var stamp = '[' + formatSecondsAsTime(control.getTimestamp()) + ']';
+    var id = ++sectionCount;
 
-    $(':focus').after('<p class="tText" id="' + id + '" contenteditable="true">' + stamp + '</p>');
-    $('#' + id).keydown(handleText);
+    $(':focus').parent().after('<div class="tSection"><p class="tStamp" id="s' + id + '">' + stamp + '</p>'+
+        '<p class="tText" id="t' + id + '" contenteditable="true"></p></div>');
+    $('#t' + id).keydown(handleText);
     
-    setEndOfContenteditable($('#' + id).get(0));
+    setEndOfContenteditable($('#t' + id).get(0));
     //TODO this is going to cause problems if a timestamp is added in the middle of a document
     window.scrollTo(0, document.body.scrollHeight);
 
@@ -129,13 +130,18 @@ var handleGhostText = function(event) {
         if (len === 0 && !target.hasClass("empty")) {
             //show :after
             target.addClass("empty");
+            //if the first section, get rid of the timestamp
+            if (target.attr('id') === "t0") {
+                $('#s0').html("");
+            }
         }
     } else {
         if (event.charCode && target.hasClass("empty")) {
             //get rid of :after
             target.removeClass("empty");
-            if (target.attr('class') === "tText") {
-                //TODO add timestamp
+            //if the first section, add a timestamp
+            if (target.attr('id') === "t0") {
+                $('#s0').html('[' + formatSecondsAsTime(control.getTimestamp()) + ']');
             }
         }
     }
@@ -153,7 +159,7 @@ var handleText = function(event) {
         target.text().length === 0 &&
         target.attr('id') !== $(".tText").first().attr('id')) {
         
-        deleteSection(target);
+        deleteSection(target.parent());
         return false;
 
     //Timestamp on enter
@@ -172,7 +178,7 @@ var handleText = function(event) {
  * EXPECTING A JQUERY OBJECT
  */
 var deleteSection = function(objectToRemove) {
-    setEndOfContenteditable(objectToRemove.prev().get(0));
+    setEndOfContenteditable(objectToRemove.prev().children(".tText").get(0));
     objectToRemove.remove();
 };
 
