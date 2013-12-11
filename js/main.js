@@ -285,10 +285,15 @@ function Controller(tag) {
  */
 Controller.prototype.loadAudio = function(url) {
     console.log("Loading audio");
+
     this.media = $('#audioPlayer')[0];
+    
     //load the file
     this.media.src = url;
     this.media.playbackRate = 1;
+    this.media.play();
+    this.media.pause();
+    this.media.load();
 };
 
 /*
@@ -296,7 +301,9 @@ Controller.prototype.loadAudio = function(url) {
  */
 Controller.prototype.loadVideo = function(url) {
     console.log("Loading video");
+
     this.media = $('#videoPlayer')[0];
+
     //load the file
     //this.media.src = url;
     //this.media.playbackRate = 1;

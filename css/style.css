@@ -33,17 +33,17 @@ button:focus {
 }
 
 
+
 /** Navigation **/
 
-#siteNav {
+.sidebar {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 50px;
+    float: right;
+    padding: 10px;
 }
 
 #navLogo {
-    width: 100%;
+    width: 50px;
     height: 50px;
     z-index: 700;
     border: 0;
@@ -55,40 +55,13 @@ button:focus {
     cursor: pointer;
 }
 
-#navTray {
-    width: 100%;
-    background-color: #5E5E5E;
+.sidebar ul {
+    margin-top: 25px;
 }
 
-#navTray ul {
-    padding-top: 20px;
+.sidebar ul li {
+    padding-bottom: 10px;
 }
-
-#navTray ul li {
-    display: inline-block;
-}
-
-#navTray ul li a {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin: 15px 13px;
-    background-size: 24px 24px;
-    background-repeat:no-repeat;
-}
-
-#settingsNav {
-    background-image: url('../img/gears.svg');
-}
-
-#exportNav {
-    background-image: url('../img/download.svg');
-}
-
-#downloadNav {
-    background-image: url('../img/download.svg');
-}
-
 
 
 
