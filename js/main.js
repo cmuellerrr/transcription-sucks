@@ -92,14 +92,20 @@ var toggleVideoBar = function() {
  * current timestamp and focus on that one.
  */
 var timestamp = function() {
-    var stamp = '[' + formatSecondsAsTime(control.getTimestamp()) + ']';
     var id = ++sectionCount;
 
-    $(':focus').parent().after('<div class="tSection"><p class="tStamp" id="s' + id + '">' + stamp + '</p>'+
-        '<p class="tText" id="t' + id + '" contenteditable="true"></p></div>');
-    $('#t' + id).keydown(handleText);
+    var section = $(document.createElement("div"));
+    section.attr("class", "tSection");
+
+    var timestamp = createTimestampElement(control.getTimestamp(), id);
+    var text = createTextElement(id);
+
+    section.append(timestamp);
+    section.append(text);
+    $(':focus').parent().after(section);
     
-    setEndOfContenteditable($('#t' + id).get(0));
+    setEndOfContenteditable(text.get(0));
+
     //TODO this is going to cause problems if a timestamp is added in the middle of a document
     window.scrollTo(0, document.body.scrollHeight);
 
@@ -117,6 +123,39 @@ var bookmark = function() {
 
 /* Utilitiy Functions */
 
+/*
+ * Create a new text p element with and use the given 
+ * id to name it.
+ */
+var createTextElement = function(id) {
+    var element = $(document.createElement("p"));
+    element.attr({
+        "class": "tText",
+        id: "t" + id,
+        contenteditable: "true"
+    });
+    element.keydown(handleText);
+
+    return element;
+};
+
+/*
+ * Create a new timestamp p element with the given time and
+ * use the given id to name it.
+ */
+var createTimestampElement = function(time, id) {
+    var element = $(document.createElement("p"));
+    element.attr({
+        "class": "tStamp",
+        id: "s" + id,
+        "data-time": time,
+        "onClick": 'control.jumpTo(' + time + ')'
+    });
+    element.html('[' + formatSecondsAsTime(time) + ']');
+
+    return element;
+};
+
 
 /*
  * Handle the use of ghost text for the titles and first paragraph.
@@ -133,6 +172,7 @@ var handleGhostText = function(event) {
             //if the first section, get rid of the timestamp
             if (target.attr('id') === "t0") {
                 $('#s0').html("");
+                $('#s0').addClass("empty");
             }
         }
     } else {
@@ -142,6 +182,7 @@ var handleGhostText = function(event) {
             //if the first section, add a timestamp
             if (target.attr('id') === "t0") {
                 $('#s0').html('[' + formatSecondsAsTime(control.getTimestamp()) + ']');
+                $('#s0').removeClass("empty");
             }
         }
     }
@@ -169,6 +210,8 @@ var handleText = function(event) {
     }
 
     //TODO handle arrow keys
+    //if up/left and at the front, go to the end of the prev section if it exists
+    ///if down/right and at the end, go to the start of the prev section if it exists
 };
 
 /*
@@ -304,7 +347,7 @@ Controller.prototype.rewind = function() {
  * Jump to the given location.
  */
 Controller.prototype.jumpTo = function(time) {
-    contole.log("JUMP");
+    console.log("JUMP");
     if (time >= jumpBuffer) time -= jumpBuffer;
     if (this.media.duration >= time) this.media.currentTime = time;
     return false;

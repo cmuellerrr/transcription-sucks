@@ -175,8 +175,14 @@ button:focus {
 }
 
 .tStamp {
+    height: 12px;
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 8px;
     color: cornflowerblue;
+}
+
+.tStamp:hover {
+    cursor: pointer;
+    text-decoration:underline
 }
