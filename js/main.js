@@ -2,22 +2,32 @@ var seekDelta = 2,
     rateDelta = 0.2,
     jumpBuffer = 0.5,
     sectionCount = 0,
-    control;
+    control,
+    storage;
 
 $(document).ready(function() {
+    //init storage
+    if ('localStorage' in window && window['localStorage'] !== null) {
+        storage = window.localStorage;
+        
+        if(storage.getItem('transcript')) {
+            console.log("RESTORING FROM CACHE");
+
+            $('.editor').html(storage['transcript']);
+            sectionCount = parseInt(storage['sectionCount'], 10);
+        }
+    }
+
     control = new Controller($('#audioPlayer')[0]);
-    
-    //init placeholders
+
+    //init text placeholders
     $('.tTitle').keypress(handleGhostText);
     $('.tTitle').focusout(handleGhostText);
     $('.tSubTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
-    $('.tText').keypress(handleGhostText);
-    $('.tText').focusout(handleGhostText);
+    $('#t0').keypress(handleGhostText);
+    $('#t0').focusout(handleGhostText);
     $('.tText').keydown(handleText);
-
-    //init nav bindings
-    $('#navLogo').click(toggleNavTray);
 
     //init file chooser bindings
     $('#audioChooser').change(loadFile);
@@ -37,6 +47,8 @@ $(document).ready(function() {
     jwerty.key('alt+l', control.slowdown, control);
     jwerty.key('alt+;', control.speedup, control);
 
+    $('.editor').bind('keydown', saveToLocalStorage);
+
     //TODO account for other browsers
     function loadFile() {
         var url = window.webkitURL.createObjectURL(this.files[0]);
@@ -50,6 +62,13 @@ $(document).ready(function() {
         $('#transcript').focus();
     }
 });
+
+var saveToLocalStorage = function() {
+    if (storage && $("#useCache").is(':checked')) {
+        storage['transcript'] = $('.editor').html();
+        storage['sectionCount'] = sectionCount;
+    }
+};
 
 var toggleNavTray = function() {
     var tray = $('#navTray');
@@ -148,7 +167,7 @@ var createTimestampElement = function(time, id) {
     element.attr({
         "class": "tStamp",
         id: "s" + id,
-        "data-time": time,
+        "data-time": time,  //TODO can we use this instead of an explicit argument?
         "onClick": 'control.jumpTo(' + time + ')'
     });
     element.html('[' + formatSecondsAsTime(time) + ']');
@@ -171,8 +190,10 @@ var handleGhostText = function(event) {
             target.addClass("empty");
             //if the first section, get rid of the timestamp
             if (target.attr('id') === "t0") {
-                $('#s0').html("");
-                $('#s0').addClass("empty");
+                var s0 = $('#s0');
+                s0.html("");
+                s0.attr('onClick', '');
+                s0.addClass("empty");
             }
         }
     } else {
@@ -181,8 +202,11 @@ var handleGhostText = function(event) {
             target.removeClass("empty");
             //if the first section, add a timestamp
             if (target.attr('id') === "t0") {
-                $('#s0').html('[' + formatSecondsAsTime(control.getTimestamp()) + ']');
-                $('#s0').removeClass("empty");
+                var s0 = $('#s0');
+                var time = control.getTimestamp();
+                s0.html('[' + formatSecondsAsTime(time) + ']');
+                s0.attr('onClick', 'control.jumpTo(' + time + ')');
+                s0.removeClass("empty");
             }
         }
     }
