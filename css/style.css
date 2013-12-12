@@ -35,11 +35,11 @@ button:focus {
 
 /** Custom UI Elements **/
 
-.btn, .btn-dropdown {
+.btn, .btn-toggle, .btn-dropdown {
     display: inline-block; 
 }
 
-.btn {
+.btn, .btn-toggle {
     padding: .75em 1.5em;
     border: 2px solid cornflowerblue;
     border-radius: 2px;
@@ -54,10 +54,6 @@ button:focus {
 
 .btn-dropdown .btn:after {
     content: ' \25BC';
-}
-
-.btn-dropdown:hover .btn-choices {
-    display: block;
 }
 
 .btn-choices {
@@ -84,7 +80,8 @@ button:focus {
 .btn-choices ul li a {
     display: block;
     text-decoration: none;
-    padding: 3px 15px;
+    padding: 5px 15px;
+    color: cornflowerblue;
 }
 
 
@@ -106,21 +103,12 @@ button:focus {
 }
 
 
-.options, .commands {
+.options {
     margin-top: 25px;
 }
 
 .options li {
     display: inline;
-}
-
-.commands li {
-    padding-bottom: 10px;
-}
-
-.commands li:before {
-    content: attr(data-key) " - ";
-    font-weight: bold;
 }
 
 
@@ -140,6 +128,21 @@ button:focus {
     position: fixed;
     top: 0;
     background-color: white;
+}
+
+.commands {
+    margin-top: 5px;
+}
+
+.commands li {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 10px;
+}
+
+.commands li:before {
+    content: "alt + " attr(data-key) " - ";
+    font-weight: bold;
 }
 
 #audioBar {

@@ -30,9 +30,23 @@ $(document).ready(function() {
     $('.tText').keydown(handleText);
 
     //init ui bindings
-    $('#autosaveBtn').click(function(event) {
-        $('#autosaveBtn').toggleClass("btn-active");
+    $('.btn-toggle').click(function(event) {
+        $(event.target).toggleClass("btn-active");
     });
+    $('.btn-dropdown>.btn').click(function(event) {
+        console.log($(event.target).get(0));
+        $(event.target).toggleClass("btn-active");
+        $(event.target).parent().children('.btn-choices').toggle();
+        event.stopPropagation();
+    });
+    //This one handles the click-off
+    $('html').click(function() {
+        //Hide the menus if visible
+        $('.btn-choices').toggle(false);
+        $('.btn-dropdown>.btn').removeClass("btn-active");
+    });
+
+    //init chooser
     $('#audioChooser').change(loadFile);
     $('#audioChooseNav').click(function(event) {
         $('#audioChooser').click();
@@ -41,14 +55,12 @@ $(document).ready(function() {
     
     //init key bindings
     jwerty.key('esc', control.togglePlay, control);
-    jwerty.key('alt+h', timestamp);
     jwerty.key('alt+b', bookmark);
-    jwerty.key('alt+n', control.screenshot, control);
-
     jwerty.key('alt+j', control.rewind, control);
     jwerty.key('alt+k', control.forward, control);
     jwerty.key('alt+l', control.slowdown, control);
     jwerty.key('alt+;', control.speedup, control);
+    //jwerty.key('alt+n', control.screenshot, control);
 
     $('.editor').keyup(saveToLocalStorage);
     $('.editor').focusout(saveToLocalStorage);
