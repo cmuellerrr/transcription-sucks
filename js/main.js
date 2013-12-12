@@ -6,7 +6,7 @@ var seekDelta = 2,
     storage;
 
 $(document).ready(function() {
-    //init storage
+    //load from storage
     if ('localStorage' in window && window['localStorage'] !== null) {
         storage = window.localStorage;
         
@@ -29,7 +29,10 @@ $(document).ready(function() {
     $('#t0').focusout(handleGhostText);
     $('.tText').keydown(handleText);
 
-    //init file chooser bindings
+    //init ui bindings
+    $('#autosaveBtn').click(function(event) {
+        $('#autosaveBtn').toggleClass("btn-active");
+    });
     $('#audioChooser').change(loadFile);
     $('#audioChooseNav').click(function(event) {
         $('#audioChooser').click();
@@ -47,7 +50,8 @@ $(document).ready(function() {
     jwerty.key('alt+l', control.slowdown, control);
     jwerty.key('alt+;', control.speedup, control);
 
-    $('.editor').bind('keydown', saveToLocalStorage);
+    $('.editor').keyup(saveToLocalStorage);
+    $('.editor').focusout(saveToLocalStorage);
 
     //TODO account for other browsers
     function loadFile() {
@@ -59,51 +63,16 @@ $(document).ready(function() {
             control.loadVideo(url);
         }
 
-        $('#transcript').focus();
+        $('.tTitle').focus();
     }
 });
 
 var saveToLocalStorage = function() {
-    if (storage && $("#useCache").is(':checked')) {
+    if (storage && $("#autosaveBtn").hasClass('btn-active')) {
         storage['transcript'] = $('.editor').html();
         storage['sectionCount'] = sectionCount;
     }
 };
-
-var toggleNavTray = function() {
-    var tray = $('#navTray');
-    if (tray.css('display') == 'none') {
-        tray.slideDown('fast');
-    } else {
-        tray.slideUp('fast');
-    }
-    return false;
-};
-
-var toggleAudioBar = function() {
-    var bar = $('#audioBar');
-    if (bar.css('display') == 'none') {
-        $('#videoBar').slideUp('fast', function() {
-            bar.slideDown('fast');
-        });
-    } else {
-        bar.slideUp('fast');
-    }
-    return false;
-};
-
-var toggleVideoBar = function() {
-    var bar = $('#videoBar');
-    if (bar.css('display') == 'none') {
-        $('#audioBar').slideUp('fast', function() {
-            bar.slideDown('fast');
-        });
-    } else {
-        bar.slideUp('fast');
-    }
-    return false;
-};
-
 
 /*
  * Add the current media's timestamp to the transcribed text.
@@ -292,132 +261,4 @@ var formatSecondsAsTime = function(secs) {
     }
 
     return hr + ':' + min + ':' + sec;
-};
-
-
-
-/** The media Controller object **/
-
-
-function Controller(tag) {
-    this.media = tag;
-}
-
-/*
- * Load the given audio file into the controller
- * TODO speed this up
- */
-Controller.prototype.loadAudio = function(url) {
-    console.log("Loading audio");
-
-    this.media = $('#audioPlayer')[0];
-    
-    //load the file
-    this.media.src = url;
-    this.media.playbackRate = 1;
-    this.media.play();
-    this.media.pause();
-    this.media.load();
-};
-
-/*
- * Load the given video file into the controller
- */
-Controller.prototype.loadVideo = function(url) {
-    console.log("Loading video");
-
-    this.media = $('#videoPlayer')[0];
-
-    //load the file
-    //this.media.src = url;
-    //this.media.playbackRate = 1;
-};
-
-
-
-/** Source playback functions **/
-
-
-/*
- * Toggle playback of the current media.
- */
-Controller.prototype.togglePlay = function() {
-    if(this.media.paused) {
-        console.log("PLAY");
-        //Rewind a little after pausing
-        if (this.media.currentTime >= jumpBuffer) {
-            this.media.currentTime -= jumpBuffer;
-        }
-        this.media.play();
-    } else {
-        console.log("PAUSE");
-        this.media.pause();
-    }
-    return false;
-};
-
-/*
- * Fast forward the current media by the set delta.
- */
-Controller.prototype.forward = function() {
-    console.log("FF");
-    this.media.currentTime += seekDelta;
-    return false;
-};
-
-/*
- * Rewind the current media by the set delta.
- */
-Controller.prototype.rewind = function() {
-    console.log("RW");
-    this.media.currentTime -= seekDelta;
-    return false;
-};
-
-/*
- * Jump to the given location.
- */
-Controller.prototype.jumpTo = function(time) {
-    console.log("JUMP");
-    if (time >= jumpBuffer) time -= jumpBuffer;
-    if (this.media.duration >= time) this.media.currentTime = time;
-    return false;
-};
-
-/*
- * Increase the current playback speed by the set delta
- */
-Controller.prototype.speedup = function() {
-    console.log("FASTER");
-    this.media.playbackRate += rateDelta;
-    return false;
-};
-
-/*
- * Decrease the current playback speed by the set delta
- */
-Controller.prototype.slowdown = function() {
-    console.log("SLOWER");
-    if (this.media.playbackRate >= (0.5 + rateDelta)) {
-        this.media.playbackRate = this.media.playbackRate - rateDelta;
-    }
-    return false;
-};
-
-/*
- * Get the current time stamp of the playing media.
- */
-Controller.prototype.getTimestamp = function() {
-    console.log("GET TIMESTAMP");
-    return Math.floor(this.media.currentTime);
-};
-
-/*
- * If currently playing a video, take a screenshot
- */
-Controller.prototype.getScreenshot = function() {
-    if (this.media.id === 'videoPlayer') {
-        console.log("GET SCREENSHOT");
-    }
-    return false;
 };

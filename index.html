@@ -15,13 +15,30 @@
 <body>
 
 <div class="sidebar">
-    <button id="navLogo"><span class="logo">Sr<span></button>
+    <div id="logo">Sr</div>
 
-    <ul>
-        <li><input type="checkbox" id="useCache" value="1"/> Autosave work to browser cache</li>
-        <li><a href="#" id="settingsNav">Settings</a></li>
-        <li><a href="#" id="exportNav"/>Export</a></li>
-        <li><a href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadNav"/>Download</a></li>
+    <ul class="options">
+        <li><a class="btn" href="#" id="autosaveBtn">Autosave</a></li>
+        <li><div class="btn-dropdown">
+            <a class="btn" href="#" id="exportBtn">Export</a>
+            <div class="btn-choices">
+                <ul>
+                    <li><a href="#">plain</a></li>
+                    <li><a href="#">html</a></li>
+                    <li><a href="#">pdf</a></li>
+                    <li><a href="#">word</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a class="btn" href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadBtn"/>Download</a></li>
+    </ul>
+
+    <ul class="commands">
+        <li data-key="esc">Play/Pause</li>
+        <li data-key="j">Jump Back</li>
+        <li data-key="k">Jump Forward</li>
+        <li data-key="l">Slow Down</li>
+        <li data-key=";">Speed Up</li>
     </ul>
 </div>
 
@@ -44,6 +61,7 @@
     </div>
 </div>
 
+<script type="text/javascript" src="js/controller.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 </body>

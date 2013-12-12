@@ -33,6 +33,60 @@ button:focus {
 }
 
 
+/** Custom UI Elements **/
+
+.btn, .btn-dropdown {
+    display: inline-block; 
+}
+
+.btn {
+    padding: .75em 1.5em;
+    border: 2px solid cornflowerblue;
+    border-radius: 2px;
+    color: cornflowerblue;
+    font-weight: bold;
+}
+
+.btn:active, .btn-active {
+    background-color: cornflowerblue;
+    color: white;
+}
+
+.btn-dropdown .btn:after {
+    content: ' \25BC';
+}
+
+.btn-dropdown:hover .btn-choices {
+    display: block;
+}
+
+.btn-choices {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    min-width: 120px;
+    margin-top: 2px;
+    padding: 5px;
+    border: 1px solid #d3d3d3;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+}
+
+.btn-choices ul {
+    padding: 0;
+    list-style: none;
+}
+
+.btn-choices ul li {
+    display: list-item;
+}
+
+.btn-choices ul li a {
+    display: block;
+    text-decoration: none;
+    padding: 3px 15px;
+}
+
 
 /** Navigation **/
 
@@ -42,25 +96,32 @@ button:focus {
     padding: 10px;
 }
 
-#navLogo {
+#logo {
     width: 50px;
     height: 50px;
-    border: 0;
     font-size: 25px;
     font-weight: bold;
-    text-align: center;
     color: white;
-    background-color: #FC5B5B;
+    background-color: cornflowerblue;
 }
 
-.sidebar ul {
+
+.options, .commands {
     margin-top: 25px;
 }
 
-.sidebar ul li {
+.options li {
+    display: inline;
+}
+
+.commands li {
     padding-bottom: 10px;
 }
 
+.commands li:before {
+    content: attr(data-key) " - ";
+    font-weight: bold;
+}
 
 
 /** General **/
@@ -136,6 +197,7 @@ button:focus {
 
 .tText {
     font-size: 20px;
+    line-height: 26px;
     margin-bottom: 25px;
 }
 
@@ -148,7 +210,7 @@ button:focus {
     height: 12px;
     font-size: 12px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: cornflowerblue;
 }
 
