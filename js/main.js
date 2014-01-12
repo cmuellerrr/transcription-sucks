@@ -120,34 +120,11 @@ var bookmark = function() {
 };
 
 /*
- * Set up the whindow for copying the transcipt.
- * Get the transcript text and plop it into a dialog window. 
- * Let the user take care of the copy part.
+ * Select all of the transcript text so the user can copy/paste
+ * into whatever they want.
  */
-var copyTranscript = function() {
-    console.log("COPY TRANSCRIPT");
-
-    alert(getTranscriptAsString());
-};
-
-/*
- * Get the transcript text as a plain ol string.
- */
-var getTranscriptAsString = function() {
-    var text = $('.tText'),
-        stamps = $('.tStamp'),
-        transcript = "";
-
-    transcript += $('.tTitle')[0].innerHTML + '\n';
-    transcript += $('.tSubTitle')[0].innerHTML + '\n\n';
-
-    for(var i = 0; i < text.length; i++) {
-        //TODO indicate bookmarks
-        transcript += stamps[i].innerHTML + '\n';
-        transcript += text[i].innerHTML + '\n\n';
-    }
-
-    return transcript;
+var selectTranscript = function() {
+    selectText('transcript');
 };
 
 
@@ -246,8 +223,10 @@ var handleText = function(event) {
     }
 
     //TODO handle arrow keys
-    //if up/left and at the front, go to the end of the prev section if it exists
-    ///if down/right and at the end, go to the start of the prev section if it exists
+    //if up and at the start of a section, go to the start of the prev section if it exists
+    //if left and at the start of a section, go to the end of the prev section if it exists
+    //if down and at the end of a section, go to the end of the prev section if it exists
+    //if right and at the end of a section, go to the start of the prev section if it exists
 };
 
 /*
@@ -289,6 +268,28 @@ var setEndOfContenteditable = function(contentEditableElement)
 };
 
 /*
+ * Select the element with the given id.
+ * via Jason Edelman: http://stackoverflow.com/a/987376
+ */
+var selectText = function(element) {
+    var doc = document,
+        text = doc.getElementById(element),
+        range, selection;
+
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();
+        range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+};
+
+/*
  * Format the given number of seconds as hh:mm:ss
  */
 var formatSecondsAsTime = function(secs) {
@@ -305,4 +306,3 @@ var formatSecondsAsTime = function(secs) {
 
     return hr + ':' + min + ':' + sec;
 };
-

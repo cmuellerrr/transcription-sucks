@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-	<title>Scriberrr - making transcription slightly less shitty.</title>
+	<title>Scriberrr - Transcription, slightly less shitty.</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="Scriberrr is here to help reduce the misery that is transcribing interviews. Free, open, and even available for you to download and use offline." />
 
@@ -10,38 +10,18 @@
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="js/jwerty.js"></script>
+
+    <script type="text/javascript" src="js/controller.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </head>
 
 <body>
-<!--
-<div id="logo">Sr</div>
--->
 <div class="header">
     <h1>Scriberrr</h1>
     <ul>
         <li><button class="btn-toggle" id="autosaveBtn">Autosave</button></li>
-        <li><button class="btn" onclick="copyTranscript()"/>Copy Text</button></li>
-        <!--
-        <li>
-            <div class="btn-dropdown">
-                <button class="btn" href="#" id="exportBtn">Export</button>
-                <div class="btn-choices">
-                    <ul>                        
-                        <li><a href="#">Clipboard</a></li>
-                        <li><a href="#"><strike>TXT</strike></a></li>
-                        <li><a href="#"><strike>HTML</strike></a></li>
-                        <li><a href="#"><strike>PDF</strike></a></li>
-                        <li><a href="#"><strike>Word</strike></a></li>
-                    </ul>
-                </div>
-            </div>
-        </li>
-    -->
+        <li><button class="btn" onclick="selectTranscript()"/>Select Text</button></li>
     </ul>
-</div>
-<div class="footer">
-    <p><a href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadBtn"/>Download</a> for use offline.</p>
-    <p>Made by <a href="http://www.iammueller.com">Chris</a></p>
 </div>
 
 <div class="container">
@@ -61,17 +41,21 @@
     
     <div class="editor">
         <span><input id="audioChooser" type="file"/><a href id="audioChooseNav"></a></span>
-        <h1 class="tTitle empty" contenteditable="true" data-ghost-text="Title"></h1>
-        <h2 class="tSubTitle empty" contenteditable="true" data-ghost-text="Subtitle"></h1>
-        <div class="tSection">
-            <p class="tStamp empty" id="s0" data-ghost-text="[0:00:00]"></p>
-            <p class="tText empty" id="t0" contenteditable="true" data-ghost-text="Start typing here - timestamps will take care of themselves..."></p>
+        <div id="transcript">
+            <h1 class="tTitle empty" contenteditable="true" data-ghost-text="Title"></h1>
+            <h2 class="tSubTitle empty" contenteditable="true" data-ghost-text="Subtitle"></h1>
+            <div class="tSection">
+                <p class="tStamp empty" id="s0" data-ghost-text="[0:00:00]"></p>
+                <p class="tText empty" id="t0" contenteditable="true" data-ghost-text="Start typing here - timestamps will take care of themselves..."></p>
+            </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="js/controller.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
+<div class="footer">
+    <p><a href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadBtn"/>Download</a> for use offline.</p>
+    <p>Made by <a href="http://www.iammueller.com">Chris</a></p>
+</div>
 
 </body>
 </html>
