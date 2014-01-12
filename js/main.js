@@ -106,7 +106,7 @@ var timestamp = function() {
     
     setEndOfContenteditable(text.get(0));
 
-    //TODO this is going to cause problems if a timestamp is added in the middle of a document
+    //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
     window.scrollTo(0, document.body.scrollHeight);
 
     return false;
@@ -117,6 +117,37 @@ var timestamp = function() {
  */
 var bookmark = function() {
     return false;
+};
+
+/*
+ * Set up the whindow for copying the transcipt.
+ * Get the transcript text and plop it into a dialog window. 
+ * Let the user take care of the copy part.
+ */
+var copyTranscript = function() {
+    console.log("COPY TRANSCRIPT");
+
+    alert(getTranscriptAsString());
+};
+
+/*
+ * Get the transcript text as a plain ol string.
+ */
+var getTranscriptAsString = function() {
+    var text = $('.tText'),
+        stamps = $('.tStamp'),
+        transcript = "";
+
+    transcript += $('.tTitle')[0].innerHTML + '\n';
+    transcript += $('.tSubTitle')[0].innerHTML + '\n\n';
+
+    for(var i = 0; i < text.length; i++) {
+        //TODO indicate bookmarks
+        transcript += stamps[i].innerHTML + '\n';
+        transcript += text[i].innerHTML + '\n\n';
+    }
+
+    return transcript;
 };
 
 

@@ -45,6 +45,7 @@ button:focus {
     border: 1px solid cornflowerblue;
     border-radius: 2px;
     color: cornflowerblue;
+    background-color: white;
     font-weight: bold;
     font-size: 10px;
 }
