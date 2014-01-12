@@ -103,7 +103,7 @@ var timestamp = function() {
     section.append(text);
     $(':focus').parent().after(section);
     
-    setEndOfContenteditable(text.get(0));
+    setPosOfContenteditable(text.get(0), false);
 
     //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
     window.scrollTo(0, document.body.scrollHeight);
@@ -225,13 +225,61 @@ var handleText = function(event) {
     } else if (event.keyCode == 13) {
         timestamp();
         return false;
-    }
 
-    //TODO handle arrow keys
-    //if up and at the start of a section, go to the start of the prev section if it exists
-    //if left and at the start of a section, go to the end of the prev section if it exists
-    //if down and at the end of a section, go to the end of the prev section if it exists
-    //if right and at the end of a section, go to the start of the prev section if it exists
+    //Handle arrow keys
+    } else if (event.keyCode >= 37 && event.keyCode <= 40) {
+        var range = window.getSelection().getRangeAt(0);
+
+        if (range.collapsed) {
+            var pos = range.startOffset,
+                upcomingText,
+                moveToStart;
+
+            var prev = target.parent().prev().children(".tText")[0];
+            var next = target.parent().next().children(".tText")[0];
+
+            //if at start of a section
+            if (pos === 0) {
+                //if left, go to the end of the prev section
+                if (event.keyCode == 37) {
+                    upcomingText = prev;
+                    moveToStart = false;
+
+                //if up, go to the start of the prev section
+                } else if (event.keyCode == 38) {
+                    upcomingText = prev;
+                    moveToStart = true;
+
+                //if down, go to the start of the next section
+                } else if (event.keyCode == 40) {
+                    upcomingText = next;
+                    moveToStart = true;
+                }
+            //if at end of a section
+            } else if (pos == range.startContainer.length) {
+                //if right, go to the start of the next section
+                if (event.keyCode == 39) {
+                    upcomingText = next;
+                    moveToStart = true;
+
+                //if up, go to the end of the prev section
+                } else if (event.keyCode == 38) {
+                    upcomingText = prev;
+                    moveToStart = false;
+
+                //if down, go to the end of the next section
+                } else if (event.keyCode == 40) {
+                    upcomingText = next;
+                    moveToStart = false;
+                }
+            }
+
+            if (upcomingText !== undefined && moveToStart !== undefined) {
+                setPosOfContenteditable(upcomingText, moveToStart);
+                return false;
+            }
+        }
+    }
 };
 
 /*
@@ -241,24 +289,24 @@ var handleText = function(event) {
  * EXPECTING A JQUERY OBJECT
  */
 var deleteSection = function(objectToRemove) {
-    setEndOfContenteditable(objectToRemove.prev().children(".tText").get(0));
+    setPosOfContenteditable(objectToRemove.prev().children(".tText").get(0), false);
     objectToRemove.remove();
 };
 
 /*
- * Sets the cursor to the end of a content editable area.
+ * Sets the cursor to the start or end of a content editable area.
  * via Nico Burns: http://stackoverflow.com/a/3866442
  *
  * EXPECTS A DOM ELEMENT
  */
-var setEndOfContenteditable = function(contentEditableElement)
+var setPosOfContenteditable = function(contentEditableElement, setToStart)
 {
-    var range,selection;
+    var range, selection;
     if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
     {
         range = document.createRange();//Create a range (a range is a like the selection but invisible)
         range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.collapse(setToStart);//collapse the range to the end point. false means collapse to end rather than the start
         selection = window.getSelection();//get the selection object (allows you to change selection)
         selection.removeAllRanges();//remove any selections already made
         selection.addRange(range);//make the range you have just created the visible selection
@@ -267,8 +315,8 @@ var setEndOfContenteditable = function(contentEditableElement)
     {
         range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
         range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection
+        range.collapse(setToStart);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection)
     }
 };
 
