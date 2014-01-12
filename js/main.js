@@ -55,12 +55,11 @@ $(document).ready(function() {
     
     //init key bindings
     jwerty.key('esc', control.togglePlay, control);
-    jwerty.key('alt+b', bookmark);
+    jwerty.key('alt+h', bookmark);
     jwerty.key('alt+j', control.rewind, control);
     jwerty.key('alt+k', control.forward, control);
     jwerty.key('alt+l', control.slowdown, control);
     jwerty.key('alt+;', control.speedup, control);
-    //jwerty.key('alt+n', control.screenshot, control);
 
     $('.editor').keyup(saveToLocalStorage);
     $('.editor').focusout(saveToLocalStorage);
@@ -116,6 +115,8 @@ var timestamp = function() {
  * Place a bookmark on the current line being transcribed
  */
 var bookmark = function() {
+    //There must be a better way...
+    $(':focus').prev('.tStamp').children('.bookmark').toggle();
     return false;
 };
 
@@ -159,8 +160,9 @@ var createTimestampElement = function(time, id) {
         "data-time": time,  //TODO can we use this instead of an explicit argument?
         "onClick": 'control.jumpTo(' + time + ')'
     });
-    element.html('[' + formatSecondsAsTime(time) + ']');
-
+    element.append('<span class="bookmark">&#8250;&#8250; </span>');
+    element.append('[' + formatSecondsAsTime(time) + ']');
+ 
     return element;
 };
 
@@ -193,7 +195,10 @@ var handleGhostText = function(event) {
             if (target.attr('id') === "t0") {
                 var s0 = $('#s0');
                 var time = control.getTimestamp();
-                s0.html('[' + formatSecondsAsTime(time) + ']');
+
+                //TODO repeating code here
+                s0.append('<span class="bookmark">&#8250;&#8250; </span>');
+                s0.append('[' + formatSecondsAsTime(time) + ']');
                 s0.attr('onClick', 'control.jumpTo(' + time + ')');
                 s0.removeClass("empty");
             }

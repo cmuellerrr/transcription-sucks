@@ -22,10 +22,6 @@ strong {
     font-weight: bold;
 }
 
-a {
-    text-decoration: none;
-}
-
 input:focus,
 select:focus,
 textarea:focus,
@@ -111,6 +107,11 @@ button:focus {
     position: fixed;
     bottom: 10px;
     left: 10px;
+    font-size: 10px;
+}
+
+.footer p {
+    margin-top: 3px;
 }
 
 /** General **/
@@ -142,7 +143,7 @@ button:focus {
 }
 
 .commands li:before {
-    content: "alt + " attr(data-key) " - ";
+    content: attr(data-key) " - ";
     font-weight: bold;
 }
 
@@ -216,6 +217,10 @@ button:focus {
     font-weight: bold;
     margin-bottom: 6px;
     color: cornflowerblue;
+}
+
+.bookmark {
+    display: none;
 }
 
 .tStamp:hover {
