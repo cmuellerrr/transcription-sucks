@@ -13,31 +13,43 @@
 </head>
 
 <body>
-
+<!--
 <div id="logo">Sr</div>
-
-<div class="sidebar">
+-->
+<div class="header">
+    <h1>Scriberrr</h1>
     <ul class="options">
         <li><a class="btn-toggle" href="#" id="autosaveBtn">Autosave</a></li>
+        <li><a class="btn" href="#" />Copy Text</a></li>
+        <!--
         <li>
             <div class="btn-dropdown">
                 <a class="btn" href="#" id="exportBtn">Export</a>
                 <div class="btn-choices">
-                    <ul>
-                        <li><a href="#">Plain</a></li>
-                        <li><a href="#">HTML</a></li>
-                        <li><a href="#">PDF</a></li>
-                        <li><a href="#">Word</a></li>
+                    <ul>                        
+                        <li><a href="#">Clipboard</a></li>
+                        <li><a href="#"><strike>TXT</strike></a></li>
+                        <li><a href="#"><strike>HTML</strike></a></li>
+                        <li><a href="#"><strike>PDF</strike></a></li>
+                        <li><a href="#"><strike>Word</strike></a></li>
                     </ul>
                 </div>
             </div>
         </li>
         <li><a class="btn" href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadBtn"/>Download</a></li>
+    -->
     </ul>
+</div>
+<div class="footer">
+    <p><a href="https://github.com/cmuellerrr/scriberrr/archive/master.zip" id="downloadBtn"/>Download</a> for use offline.</p>
+    <p>Made by <a href="http://www.iammueller.com">Chris</a></p>
 </div>
 
 <div class="container">
     <div class="source">
+        <div id="audioBar">
+            <audio id="audioPlayer" controls preload="none"></audio>
+        </div>
         <ul class="commands">
             <li data-key="esc">Play/Pause</li>
             <li data-key="h">Bookmark</li>
@@ -46,9 +58,6 @@
             <li data-key="l">Slow Down</li>
             <li data-key=";">Speed Up</li>
         </ul>
-        <div id="audioBar">
-            <audio id="audioPlayer" controls preload="none"></audio>
-        </div>
     </div>
     
     <div class="editor">

@@ -7,6 +7,7 @@ body {
 	background: #fff; 
 	font-family: Arial;
     color: #383838;
+    min-width: 1150px;
 }
 
 h1, h2 {
@@ -40,11 +41,12 @@ button:focus {
 }
 
 .btn, .btn-toggle {
-    padding: .75em 1.5em;
-    border: 2px solid cornflowerblue;
+    padding: 5px;
+    border: 1px solid cornflowerblue;
     border-radius: 2px;
     color: cornflowerblue;
     font-weight: bold;
+    font-size: 10px;
 }
 
 .btn:active, .btn-active {
@@ -87,27 +89,28 @@ button:focus {
 
 /** Navigation **/
 
-.sidebar {
+.header {
     position: fixed;
     top: 10px;
-    right: 10px;
+    left: 10px;
 }
 
-#logo {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    margin: 10px;
-    font-size: 25px;
+.header h1 {
+    font-size: 30px;
     font-weight: bold;
-    color: white;
-    background-color: cornflowerblue;
+    margin-bottom: 5px;
+    color: cornflowerblue;
 }
 
-.options li {
+.header ul li {
     display: inline;
 }
 
+.footer {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
 
 /** General **/
 
@@ -128,7 +131,7 @@ button:focus {
 }
 
 .commands {
-    margin-top: 5px;
+    margin-top: 0;
 }
 
 .commands li {

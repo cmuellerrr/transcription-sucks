@@ -274,3 +274,4 @@ var formatSecondsAsTime = function(secs) {
 
     return hr + ':' + min + ':' + sec;
 };
+
