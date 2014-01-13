@@ -43,13 +43,18 @@ $(document).ready(function() {
         return false;
     });
     
-    //init key bindings
+    //init key bindings - remove default behavior first
     jwerty.key('esc', control.togglePlay, control);
-    jwerty.key('alt+h', bookmark);
-    jwerty.key('alt+j', control.rewind, control);
-    jwerty.key('alt+k', control.forward, control);
-    jwerty.key('alt+l', control.slowdown, control);
-    jwerty.key('alt+;', control.speedup, control);
+    jwerty.key('ctrl+h', false);
+    jwerty.key('ctrl+h', bookmark);
+    jwerty.key('ctrl+j', false);
+    jwerty.key('ctrl+j', control.rewind, control);
+    jwerty.key('ctrl+k', false);
+    jwerty.key('ctrl+k', control.forward, control);
+    jwerty.key('ctrl+l', false);
+    jwerty.key('ctrl+l', control.slowdown, control);
+    jwerty.key('ctrl+;', false);
+    jwerty.key('ctrl+;', control.speedup, control);
 
     $('.editor').keyup(saveToLocalStorage);
     $('.editor').focusout(saveToLocalStorage);
