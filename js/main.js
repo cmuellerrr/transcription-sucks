@@ -25,25 +25,15 @@ $(document).ready(function() {
     $('.tTitle').focusout(handleGhostText);
     $('.tSubTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
+    //Only applies to the first section
     $('#t0').keypress(handleGhostText);
     $('#t0').focusout(handleGhostText);
+    //Use the class here to include stuff loaded from cache
     $('.tText').keydown(handleText);
 
     //init ui bindings
     $('.btn-toggle').click(function(event) {
         $(event.target).toggleClass("btn-active");
-    });
-    $('.btn-dropdown>.btn').click(function(event) {
-        console.log($(event.target).get(0));
-        $(event.target).toggleClass("btn-active");
-        $(event.target).parent().children('.btn-choices').toggle();
-        event.stopPropagation();
-    });
-    //This one handles the click-off
-    $('html').click(function() {
-        //Hide the menus if visible
-        $('.btn-choices').toggle(false);
-        $('.btn-dropdown>.btn').removeClass("btn-active");
     });
 
     //init chooser
@@ -115,7 +105,7 @@ var timestamp = function() {
  * Place a bookmark on the current line being transcribed
  */
 var bookmark = function() {
-    //There must be a better way...
+    //TODO There must be a better way...
     $(':focus').prev('.tStamp').children('.bookmark').toggle();
     return false;
 };
@@ -188,6 +178,7 @@ var handleGhostText = function(event) {
             }
         }
     } else {
+        //For any character entered
         if (event.charCode && target.hasClass("empty")) {
             //get rid of :after
             target.removeClass("empty");
@@ -213,10 +204,10 @@ var handleGhostText = function(event) {
 var handleText = function(event) {
     var target = $(event.target);
 
-    //Delete back into the previous section
+    //Delete back into the previous section as long as it isn't the first one
     if (event.keyCode == 8 &&
         target.text().length === 0 &&
-        target.attr('id') !== $(".tText").first().attr('id')) {
+        target.attr('id') !== "t0") {
         
         deleteSection(target.parent());
         return false;
@@ -231,12 +222,13 @@ var handleText = function(event) {
         var range = window.getSelection().getRangeAt(0);
 
         if (range.collapsed) {
-            var pos = range.startOffset,
+            //TODO This is pretty ugly...
+            var prev = target.parent().prev().children(".tText")[0],
+                next = target.parent().next().children(".tText")[0],
+                pos = range.startOffset,
                 upcomingText,
                 moveToStart;
 
-            var prev = target.parent().prev().children(".tText")[0];
-            var next = target.parent().next().children(".tText")[0];
 
             //if at start of a section
             if (pos === 0) {
@@ -289,7 +281,7 @@ var handleText = function(event) {
  * EXPECTING A JQUERY OBJECT
  */
 var deleteSection = function(objectToRemove) {
-    setPosOfContenteditable(objectToRemove.prev().children(".tText").get(0), false);
+    setPosOfContenteditable(objectToRemove.prev().children(".tText")[0], false);
     objectToRemove.remove();
 };
 
