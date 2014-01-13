@@ -13,7 +13,7 @@ $(document).ready(function() {
         if(storage.getItem('transcript')) {
             console.log("RESTORING FROM CACHE");
 
-            $('.editor').html(storage['transcript']);
+            $('#transcript').html(storage['transcript']);
             sectionCount = parseInt(storage['sectionCount'], 10);
         }
     }
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
 var saveToLocalStorage = function() {
     if (storage && $("#autosaveBtn").hasClass('btn-active')) {
-        storage['transcript'] = $('.editor').html();
+        storage['transcript'] = $('#transcript').html();
         storage['sectionCount'] = sectionCount;
     }
 };
