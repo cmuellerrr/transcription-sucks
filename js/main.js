@@ -61,15 +61,30 @@ $(document).ready(function() {
 
     //TODO account for other browsers
     function loadFile() {
-        var url = window.webkitURL.createObjectURL(this.files[0]);
-        
-        if (this.id === 'audioChooser') {
-            control.loadAudio(url);
-        } else if (this.id === 'videoChooser') {
-            control.loadVideo(url);
+        var source = this.files[0],
+            url;
+
+        if (window.webkitURL) {
+            url = window.webkitURL.createObjectURL(source);
+
+        } else if (window.URL) {
+            url = window.URL.createObjectURL(source);
+
+        } else if (window.createObjectURL) {
+            url = window.createObjectURL(source);
         }
 
-        $('.tTitle').focus();
+        if (url) {
+            if (this.id === 'audioChooser') {
+                control.loadAudio(url);
+            } else if (this.id === 'videoChooser') {
+                control.loadVideo(url);
+            }
+
+            $('.tTitle').focus();
+        } else {
+            alert("NONE");
+        }
     }
 });
 
@@ -307,6 +322,7 @@ var setPosOfContenteditable = function(contentEditableElement, setToStart)
         selection = window.getSelection();//get the selection object (allows you to change selection)
         selection.removeAllRanges();//remove any selections already made
         selection.addRange(range);//make the range you have just created the visible selection
+        contentEditableElement.focus();
     }
     else if(document.selection)//IE 8 and lower
     {
@@ -314,6 +330,7 @@ var setPosOfContenteditable = function(contentEditableElement, setToStart)
         range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
         range.collapse(setToStart);//collapse the range to the end point. false means collapse to end rather than the start
         range.select();//Select the range (make it the visible selection)
+        contentEditableElement.focus();
     }
 };
 
