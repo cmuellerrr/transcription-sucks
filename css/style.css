@@ -37,18 +37,17 @@ button:focus {
 }
 
 .btn, .btn-toggle {
-    padding: 5px;
-    border: 1px solid cornflowerblue;
+    padding: 4px 8px;
+    border: 1px solid #c0c0c0;
     border-radius: 2px;
-    color: cornflowerblue;
     background-color: white;
-    font-weight: bold;
-    font-size: 10px;
+    font-size: 14px;
+    color: #c0c0c0;
 }
 
 .btn:active, .btn-active {
-    background-color: cornflowerblue;
     color: white;
+    background-color: #c0c0c0;
 }
 
 .btn-dropdown .btn:after {
@@ -88,8 +87,8 @@ button:focus {
 
 .header {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 0px;
+    left: 0px;
 }
 
 .header h1 {
@@ -99,20 +98,38 @@ button:focus {
     color: cornflowerblue;
 }
 
-.header ul li {
-    display: inline;
+.logo {
+    width: 60px;
+    height: 65px;
+    margin-left: 35px;
 }
 
 .footer {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
-    font-size: 10px;
+    bottom: 0px;
+    left: 0px;
+    margin: 10px;
 }
 
-.footer p {
-    margin-top: 3px;
+.credits {
+    display: inline-block;
 }
+
+.credits p {
+    margin-top: 3px;
+    font-size: 11px;
+}
+.options {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    margin: 10px;
+}
+
+.options li {
+    display: inline;
+}
+
 
 /** General **/
 
@@ -133,7 +150,7 @@ button:focus {
 }
 
 .commands {
-    margin-top: 0;
+    margin-top: 5px;
 }
 
 .commands li {
@@ -153,7 +170,7 @@ button:focus {
 
 #audioPlayer {
     width: 800px;    
-    padding: 5px 0;
+    padding: 10px 0;
 }
 
 

@@ -59,7 +59,7 @@ $(document).ready(function() {
     $('.editor').keyup(saveToLocalStorage);
     $('.editor').focusout(saveToLocalStorage);
 
-    //TODO account for other browsers
+    //handle the loading of source material
     function loadFile() {
         var source = this.files[0],
             url;
