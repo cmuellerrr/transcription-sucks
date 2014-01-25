@@ -6,6 +6,7 @@ var seekDelta = 2,
     storage;
 
 $(document).ready(function() {
+
     //load from storage
     if ('localStorage' in window && window['localStorage'] !== null) {
         storage = window.localStorage;
@@ -125,6 +126,7 @@ var timestamp = function() {
  * Place a bookmark on the current line being transcribed
  */
 var bookmark = function() {
+    console.log("BOOKMARK");
     //TODO There must be a better way...
     $(':focus').prev('.tStamp').children('.bookmark').toggle();
     return false;

@@ -34,16 +34,16 @@ button:focus {
 
 .btn, .btn-toggle, .btn-choices {
     padding: 4px 8px;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #444;
     border-radius: 2px;
     background-color: white;
     font-size: 14px;
-    color: #c0c0c0;
+    color: #444;
 }
 
 .btn:active, .btn-active {
     color: white;
-    background-color: #c0c0c0;
+    background-color: #444;
 }
 
 .btn-dropdown .btn:after {
@@ -73,7 +73,7 @@ button:focus {
     display: block;
     text-decoration: none;
     padding: 5px 15px;
-    color: #c0c0c0;
+    color: #444;
 }
 
 
@@ -86,16 +86,16 @@ button:focus {
 }
 
 .logo {
-    width: 60px;
-    height: 65px;
-    margin-left: 35px;
+    width: 45px;
+    height: 50px;
+    margin-left: 20px;
 }
 
 .footer {
     position: fixed;
     bottom: 0px;
     left: 0px;
-    margin: 10px;
+    margin: 5px;
 }
 
 .credits p {
@@ -106,7 +106,7 @@ button:focus {
     position: fixed;
     top: 0px;
     right: 0px;
-    margin: 10px;
+    margin: 5px;
 }
 
 .options li {
@@ -132,10 +132,6 @@ button:focus {
     background-color: white;
 }
 
-.commands {
-    margin-top: 5px;
-}
-
 .commands li {
     display: inline-block;
     margin-right: 20px;
@@ -152,8 +148,8 @@ button:focus {
 }
 
 #audioPlayer {
-    width: 800px;    
-    padding: 10px 0;
+    width: 800px;
+    padding: 5px 0;
 }
 
 
