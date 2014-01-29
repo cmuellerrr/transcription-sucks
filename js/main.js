@@ -127,8 +127,7 @@ var timestamp = function() {
  */
 var bookmark = function() {
     console.log("BOOKMARK");
-    //TODO There must be a better way...
-    $(':focus').prev('.tStamp').children('.bookmark').toggle();
+    $(':focus').parent().toggleClass("pullout");
     return false;
 };
 
@@ -172,7 +171,7 @@ var createTimestampElement = function(time, id) {
         "data-time": time,  //TODO can we use this instead of an explicit argument?
         "onClick": 'control.jumpTo(' + time + ')'
     });
-    element.append('<span class="bookmark">&#8250;&#8250; </span>');
+    //element.append('<span class="bookmark">&#8250;&#8250; </span>');
     element.append('[' + formatSecondsAsTime(time) + ']');
  
     return element;
@@ -210,7 +209,7 @@ var handleGhostText = function(event) {
                 var time = control.getTimestamp();
 
                 //TODO repeating code here
-                s0.append('<span class="bookmark">&#8250;&#8250; </span>');
+                //s0.append('<span class="bookmark">&#8250;&#8250; </span>');
                 s0.append('[' + formatSecondsAsTime(time) + ']');
                 s0.attr('onClick', 'control.jumpTo(' + time + ')');
                 s0.removeClass("empty");

@@ -193,8 +193,15 @@ footer {
     margin-bottom: 6px;
 }
 
-.bookmark {
-    display: none;
+.pullout {
+    border-left: 3px solid #444444;
+    padding-left: 15px;
+}
+
+.pullout .tText {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 23px;
 }
 
 .tStamp:hover {
