@@ -33,7 +33,7 @@ $(document).ready(function() {
     $('.tText').keydown(handleText);
 
     //init ui bindings
-    $('.btn-toggle').click(function(event) {
+    $('.toggle').click(function(event) {
         $(event.target).toggleClass("btn-active");
     });
 
