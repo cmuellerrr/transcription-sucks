@@ -142,7 +142,6 @@ var selectTranscript = function() {
 };
 
 
-
 /* Utilitiy Functions */
 
 /*
