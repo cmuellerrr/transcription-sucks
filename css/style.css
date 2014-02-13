@@ -1,6 +1,27 @@
-@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
-@import url(http://fonts.googleapis.com/css?family=Lora:400,700);
- 
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat-regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Montserrat' ;
+    src: url('../fonts/montserrat-bold.ttf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Lora';
+    src: url('../fonts/lora-regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Lora' ;
+    src: url('../fonts/lora-bold.ttf');
+    font-weight: 700;
+}
+
 
 html, body, .container {
     height: 100%;
@@ -195,8 +216,8 @@ footer {
 }
 
 .pullout {
-    border-left: 3px solid #444444;
-    padding-left: 15px;
+    border-left: 2px solid #444444;
+    padding-left: 10px;
 }
 
 .pullout .tText {
