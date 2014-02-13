@@ -1,8 +1,8 @@
 /** The media Controller object **/
 
 
-function Controller(tag) {
-    this.media = tag;
+function Controller(audioElement) {
+    this.media = audioElement;
 }
 
 /*

@@ -6,7 +6,6 @@ var seekDelta = 2,
     storage;
 
 $(document).ready(function() {
-
     //load from storage
     if ('localStorage' in window && window['localStorage'] !== null) {
         storage = window.localStorage;
@@ -19,6 +18,9 @@ $(document).ready(function() {
         }
     }
 
+    //audiojs.events.ready(function() {
+    //    var as = audiojs.create($('#audioPlayer')[0]);
+    //});
     control = new Controller($('#audioPlayer')[0]);
 
     //init text placeholders
