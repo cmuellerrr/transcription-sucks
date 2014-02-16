@@ -1,24 +1,24 @@
 @font-face {
     font-family: 'Montserrat';
-    src: url('../fonts/montserrat-regular.ttf');
+    src: url('../fonts/montserrat-regular.ttf') format('truetype');
     font-weight: 400;
 }
 
 @font-face {
     font-family: 'Montserrat' ;
-    src: url('../fonts/montserrat-bold.ttf');
+    src: url('../fonts/montserrat-bold.ttf') format('truetype');
     font-weight: 700;
 }
 
 @font-face {
     font-family: 'Lora';
-    src: url('../fonts/lora-regular.ttf');
+    src: url('../fonts/lora-regular.ttf') format('truetype');
     font-weight: 400;
 }
 
 @font-face {
     font-family: 'Lora' ;
-    src: url('../fonts/lora-bold.ttf');
+    src: url('../fonts/lora-bold.ttf') format('truetype');
     font-weight: 700;
 }
 
