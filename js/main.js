@@ -46,21 +46,31 @@ $(document).ready(function() {
         return false;
     });
     
-    //init key bindings - remove default behavior first
-    jwerty.key('esc', control.togglePlay, control);
-    jwerty.key('ctrl+h', false);
-    jwerty.key('ctrl+h', bookmark);
-    jwerty.key('ctrl+j', false);
-    jwerty.key('ctrl+j', control.rewind, control);
-    jwerty.key('ctrl+k', false);
-    jwerty.key('ctrl+k', control.forward, control);
-    jwerty.key('ctrl+l', false);
-    jwerty.key('ctrl+l', control.slowdown, control);
-    jwerty.key('ctrl+;', false);
-    jwerty.key('ctrl+;', control.speedup, control);
+    initCommands();
 
     $('.editor').keyup(saveToLocalStorage);
     $('.editor').focusout(saveToLocalStorage);
+
+    //init key bindings - remove default behavior first then add label
+    function initCommands() {
+        var ctxKey = 'alt';
+        jwerty.key('esc', control.togglePlay, control);
+        jwerty.key(ctxKey + '+h', false);
+        jwerty.key(ctxKey + '+h', bookmark);
+        jwerty.key(ctxKey + '+j', false);
+        jwerty.key(ctxKey + '+j', control.rewind, control);
+        jwerty.key(ctxKey + '+k', false);
+        jwerty.key(ctxKey + '+k', control.forward, control);
+        jwerty.key(ctxKey + '+l', false);
+        jwerty.key(ctxKey + '+l', control.slowdown, control);
+        jwerty.key(ctxKey + '+;', false);
+        jwerty.key(ctxKey + '+;', control.speedup, control);
+
+        $('#commands li').each(function() {
+            console.log(this);
+            $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
+        });
+    }
 
     //handle the loading of source material
     function loadFile() {

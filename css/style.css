@@ -38,7 +38,7 @@ a {
     color: #444444;
 }
 
-strong {
+b {
     font-weight: bold;
 }
 
@@ -141,11 +141,6 @@ footer {
     margin-right: 15px;
     font-size: 10px;
     color: #adadad;
-}
-
-.commands li:before {
-    content: attr(data-key) " - ";
-    font-weight: bold;
 }
 
 #audioBar {
