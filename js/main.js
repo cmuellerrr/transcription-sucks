@@ -67,7 +67,6 @@ $(document).ready(function() {
         jwerty.key(ctxKey + '+;', control.speedup, control);
 
         $('#commands li').each(function() {
-            console.log(this);
             $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
         });
     }
@@ -139,7 +138,9 @@ var timestamp = function() {
  */
 var bookmark = function() {
     console.log("BOOKMARK");
-    $(':focus').parent().toggleClass("pullout");
+    var focus = $(':focus');
+
+    if (focus.hasClass('tText')) focus.parent().toggleClass("pullout");
     return false;
 };
 
