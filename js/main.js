@@ -61,10 +61,10 @@ $(document).ready(function() {
         jwerty.key(ctxKey + '+j', control.rewind, control);
         jwerty.key(ctxKey + '+k', false);
         jwerty.key(ctxKey + '+k', control.forward, control);
-        jwerty.key(ctxKey + '+l', false);
-        jwerty.key(ctxKey + '+l', control.slowdown, control);
-        jwerty.key(ctxKey + '+;', false);
-        jwerty.key(ctxKey + '+;', control.speedup, control);
+        jwerty.key(ctxKey + '+u', false);
+        jwerty.key(ctxKey + '+u', control.slowdown, control);
+        jwerty.key(ctxKey + '+i', false);
+        jwerty.key(ctxKey + '+i', control.speedup, control);
 
         $('#commands li').each(function() {
             $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
