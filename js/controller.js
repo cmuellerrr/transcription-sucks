@@ -91,7 +91,9 @@ Controller.prototype.jumpTo = function(time) {
  */
 Controller.prototype.speedup = function() {
     console.log("FASTER");
-    this.media.playbackRate += rateDelta;
+    if (this.media.playbackRate <= (2.0 - rateDelta)) {
+        this.media.playbackRate += rateDelta;
+    }
     return false;
 };
 
@@ -101,7 +103,7 @@ Controller.prototype.speedup = function() {
 Controller.prototype.slowdown = function() {
     console.log("SLOWER");
     if (this.media.playbackRate >= (0.5 + rateDelta)) {
-        this.media.playbackRate = this.media.playbackRate - rateDelta;
+        this.media.playbackRate -= rateDelta;
     }
     return false;
 };

@@ -115,9 +115,7 @@ var saveToLocalStorage = function() {
 var timestamp = function() {
     var id = ++sectionCount;
 
-    var section = $(document.createElement("div"));
-    section.attr("class", "tSection");
-
+    var section = $(document.createElement("section"));
     var timestamp = createTimestampElement(control.getTimestamp(), id);
     var text = createTextElement(id);
 
