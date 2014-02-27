@@ -105,7 +105,8 @@ header {
     width: 25px;
     height: 25px;
     text-align: center;
-    font-size: 20px;
+    font-size: 13px;
+    line-height: 23px;
     color: white;
     background-color: #2980b9;
     background-size: cover;
