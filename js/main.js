@@ -168,29 +168,9 @@ var saveToLocalStorage = function() {
 };
 
 /*
- * Add the current media's timestamp to the transcribed text.
  * Add a new section after the currently focused one with the 
- * current timestamp and focus on that one.
+ * current timestamp and set focus to it.
  */
-var timestamp = function() {
-    var id = ++sectionCount;
-
-    var section = $(document.createElement("section"));
-    var timestamp = createTimestampElement(control.getTimestamp(), id);
-    var text = createTextElement(id);
-
-    section.append(timestamp);
-    section.append(text);
-    $(':focus').parent().after(section);
-    
-    setPosOfContenteditable(text.get(0), false);
-
-    //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
-    window.scrollTo(0, document.body.scrollHeight);
-
-    return false;
-};
-
 var addSection = function() {
     console.log("ADD SECTION");
     var id = ++sectionCount;
@@ -224,31 +204,6 @@ var addSection = function() {
 
     //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
     window.scrollTo(0, document.body.scrollHeight);
-};
-
-//expecting a text node
-var trimNode = function(node) {
-    var trimmings = '';
-    var len = node.length;
-    var range = rangy.getSelection().getRangeAt(0);
-    var position = range.startOffset;
-                
-    if (len > 0 && position < len) {
-        range.setEnd(node, len);
-        trimmings = range.toString();
-        range.deleteContents();
-    }
-                
-    return trimmings;
-};
-
-//expecting an element
-var setCursor = function(element) {
-    var range = rangy.createRange();
-    range.selectNodeContents(element.get(0));
-    range.collapse(true);
-    var sel = rangy.getSelection();
-    sel.setSingleRange(range);
 };
 
 /*
@@ -286,7 +241,6 @@ var createTextElement = function(id) {
         "class": "tText",
         id: "t" + id
     });
-    element.keydown(handleText);
 
     return element;
 };
@@ -307,6 +261,40 @@ var createTimestampElement = function(time, id) {
     element.append('[' + formatSecondsAsTime(time) + ']');
  
     return element;
+};
+
+/*
+ * Trim the text off the given node which occurs after the 
+ * selection point. Return the trimmed text.
+ *
+ * Expecting a text node
+ */
+var trimNode = function(node) {
+    var trimmings = '';
+    var len = node.length;
+    var range = rangy.getSelection().getRangeAt(0);
+    var position = range.startOffset;
+    
+    if (len > 0 && position < len) {
+        range.setEnd(node, len);
+        trimmings = range.toString();
+        range.deleteContents();
+    }
+
+    return trimmings;
+};
+
+/*
+ * Set the cursor to the beginning of the given element.
+ *
+ * Expecting an element
+ */
+var setCursor = function(element) {
+    var range = rangy.createRange();
+    range.selectNodeContents(element.get(0));
+    range.collapse(true);
+    var sel = rangy.getSelection();
+    sel.setSingleRange(range);
 };
 
 
@@ -347,123 +335,6 @@ var handleGhostText = function(event) {
                 s0.removeClass("empty");
             }
         }
-    }
-};
-
-/*
- * Handle special cases for input on the text sections.
- * Mainly just looking at enter and backspace.
- */
-var handleText = function(event) {
-    var target = $(event.target);
-
-    //Delete back into the previous section as long as it isn't the first one
-    if (event.keyCode == 8 &&
-        target.text().length === 0 &&
-        target.attr('id') !== "t0") {
-        
-        deleteSection(target.parent());
-        return false;
-
-    //Timestamp on enter
-    } else if (event.keyCode == 13) {
-        timestamp();
-        return false;
-
-    //Handle arrow keys
-    } else if (event.keyCode >= 37 && event.keyCode <= 40) {
-        var range = window.getSelection().getRangeAt(0);
-
-        if (range.collapsed) {
-            //TODO This is pretty ugly...
-            var prev = target.parent().prev().children(".tText")[0],
-                next = target.parent().next().children(".tText")[0],
-                pos = range.startOffset,
-                upcomingText,
-                moveToStart;
-
-
-            //if at start of a section
-            if (pos === 0) {
-                //if left, go to the end of the prev section
-                if (event.keyCode == 37) {
-                    upcomingText = prev;
-                    moveToStart = false;
-
-                //if up, go to the start of the prev section
-                } else if (event.keyCode == 38) {
-                    upcomingText = prev;
-                    moveToStart = true;
-
-                //if down, go to the start of the next section
-                } else if (event.keyCode == 40) {
-                    upcomingText = next;
-                    moveToStart = true;
-                }
-            //if at end of a section
-            } else if (pos == range.startContainer.length) {
-                //if right, go to the start of the next section
-                if (event.keyCode == 39) {
-                    upcomingText = next;
-                    moveToStart = true;
-
-                //if up, go to the end of the prev section
-                } else if (event.keyCode == 38) {
-                    upcomingText = prev;
-                    moveToStart = false;
-
-                //if down, go to the end of the next section
-                } else if (event.keyCode == 40) {
-                    upcomingText = next;
-                    moveToStart = false;
-                }
-            }
-
-            if (upcomingText !== undefined && moveToStart !== undefined) {
-                setPosOfContenteditable(upcomingText, moveToStart);
-                return false;
-            }
-        }
-    }
-};
-
-/*
- * Remove the given section and set the focus to the previous
- * one.
- *
- * EXPECTING A JQUERY OBJECT
- */
-var deleteSection = function(objectToRemove) {
-    setPosOfContenteditable(objectToRemove.prev().children(".tText")[0], false);
-    objectToRemove.remove();
-};
-
-/*
- * Sets the cursor to the start or end of a content editable area.
- * via Nico Burns: http://stackoverflow.com/a/3866442
- *
- * EXPECTS A DOM ELEMENT
- */
-var setPosOfContenteditable = function(contentEditableElement, setToStart)
-{
-    var range, selection;
-    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-    {
-        range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(setToStart);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);//make the range you have just created the visible selection
-        contentEditableElement.focus();
-    }
-    else if(document.selection)//IE 8 and lower
-    {
-        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-        range.collapse(setToStart);//collapse the range to the end point. false means collapse to end rather than the start
-        range.select();//Select the range (make it the visible selection)
-        contentEditableElement.focus();
     }
 };
 
