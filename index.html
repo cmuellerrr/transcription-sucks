@@ -2,7 +2,7 @@
 <head>
 	<title>Transcription Sucks</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="description" content="Transcription Sucks. This is a tool trying to make it slightly less awful. Free, open, and even available for you to download and use offline." />
+	<meta name="description" content="Transcription Sucks. This is a tool trying to make it slightly less awful. Free, open, and even available to download and use offline." />
 
 	<link rel="stylesheet" href="css/reset.css" type="text/css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
@@ -10,6 +10,7 @@
     <script type='text/javascript' src='js/jquery.min.js'></script>
     <!--<script type="text/javascript" src="js/audiojs/audio.min.js"></script>-->
     <script type="text/javascript" src="js/jwerty.js"></script>
+    <script type="text/javascript" src="js/rangy-core.js"></script>
 
     <script type="text/javascript" src="js/controller.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
@@ -44,17 +45,19 @@
         <div id="transcript">
             <h1 class="tTitle empty" contenteditable="true" data-ghost-text="Title"></h1>
             <h2 class="tSubTitle empty" contenteditable="true" data-ghost-text="Subtitle"></h2>
-            <section>
-                <p class="tStamp empty" id="s0" data-ghost-text="[0:00:00]"></p>
-                <p class="tText empty" id="t0" contenteditable="true" data-ghost-text="Start typing here - timestamps will take care of themselves..."></p>
-            </section>
+            <div id="transcript-body" contenteditable="true">
+                <section>
+                    <p class="tStamp empty" id="s0" contenteditable="false" data-ghost-text="[0:00:00]"></p>
+                    <p class="tText empty" id="t0" data-ghost-text="Start typing here - timestamps will take care of themselves..."></p>
+                </section>
+            </div>
         </div>
     </div>
 </div>
 
 <footer>
     <div class="credits">
-        <p><a href="https://github.com/cmuellerrr/scriberrr/archive/master.zip"/>Download</a> for use offline.</p>
+        <p><a href="https://github.com/cmuellerrr/transcription-sucks/archive/master.zip"/>Download</a> for use offline.</p>
         <p>Made by <a href="http://www.iammueller.com" target="_blank">Chris</a></p>
     </div>    
 </footer>

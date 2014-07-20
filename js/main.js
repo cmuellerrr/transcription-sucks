@@ -28,11 +28,71 @@ $(document).ready(function() {
     $('.tTitle').focusout(handleGhostText);
     $('.tSubTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
-    //Only applies to the first section
-    $('#t0').keypress(handleGhostText);
-    $('#t0').focusout(handleGhostText);
-    //Use the class here to include stuff loaded from cache
-    $('.tText').keydown(handleText);
+
+    $('#transcript-body').keypress(function(event) {
+        if (event.target.children.length == 1) {
+            if (event.keyCode == 13) {
+                //if moving on from an empty first row, just give the timestamp of 0 to the first section
+                if ($('#t0').text().length === 0 && $('#s0').text().length === 0) {
+                    var s0 = $('#s0');
+                    var time = 0;
+
+                    //TODO repeating code here
+                    s0.append('[' + formatSecondsAsTime(time) + ']');
+                    s0.attr('onClick', 'control.jumpTo(' + time + ')');
+                    s0.removeClass("empty");
+
+                    var t0 = $('#t0');
+                    t0.text('...');
+                    t0.removeClass("empty");
+                }
+
+                addSection();
+                return false;
+            }
+            else if (event.charCode) {
+                if ($('#t0').text().length === 0 && $('#s0').text().length === 0) {
+                    var s0 = $('#s0');
+                    var time = control.getTimestamp();
+
+                    //TODO repeating code here
+                    s0.append('[' + formatSecondsAsTime(time) + ']');
+                    s0.attr('onClick', 'control.jumpTo(' + time + ')');
+                    s0.removeClass("empty");
+
+                    var t0 = $('#t0');
+                    t0.removeClass("empty");
+                }
+            }
+        }
+        else {
+            if (event.keyCode == 13) {
+                addSection();
+                return false;
+            }
+        }
+    });
+
+    $('#transcript-body').keydown(function(event) {
+        if (event.target.children.length == 1) {
+            if (event.keyCode == 8) {
+                if ($('#t0').text().length === 0) {
+                    return false;
+                }
+            }
+        }
+    });
+
+    //on focusout, if t0 is empty and body has 1 child, add empty class and clear timestamp
+    $('#transcript-body').focusout(function(event) {
+        if (event.target.children.length == 1) {
+            if ($('#t0').text().length === 0 && !$('#t0').hasClass("empty")) {
+                $('#s0').text("");
+                $('#s0').addClass("empty");
+                $('#t0').addClass("emtpy");
+            }
+        }
+    });
 
     //init ui bindings
     $('.toggle').click(function(event) {
@@ -131,6 +191,66 @@ var timestamp = function() {
     return false;
 };
 
+var addSection = function() {
+    console.log("ADD SECTION");
+    var id = ++sectionCount;
+
+    var curSelection = rangy.getSelection();
+    var curRange = curSelection.getRangeAt(0);
+    var curNode = curSelection.anchorNode;
+
+    //make sure there's only one range
+    //TODO is this even necessary?
+    if (curSelection.rangeCount > 1) return false;
+
+    //if selected a range, delete first, then continue
+    if (!curSelection.isCollapsed) {
+        curRange.deleteContents();
+        curRange.collapse(true);
+    }
+
+    var trim = trimNode(curNode);
+
+    var section = $(document.createElement("section"));
+    var timestamp = createTimestampElement(control.getTimestamp(), id);
+    var text = createTextElement(id);
+    text.append(trim);
+
+    section.append(timestamp);
+    section.append(text);
+    $(curNode.nodeType == 3 ? curNode.parentNode.parentNode : curNode.parentNode).after(section);
+
+    setCursor(text);
+
+    //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
+    window.scrollTo(0, document.body.scrollHeight);
+};
+
+//expecting a text node
+var trimNode = function(node) {
+    var trimmings = '';
+    var len = node.length;
+    var range = rangy.getSelection().getRangeAt(0);
+    var position = range.startOffset;
+                
+    if (len > 0 && position < len) {
+        range.setEnd(node, len);
+        trimmings = range.toString();
+        range.deleteContents();
+    }
+                
+    return trimmings;
+};
+
+//expecting an element
+var setCursor = function(element) {
+    var range = rangy.createRange();
+    range.selectNodeContents(element.get(0));
+    range.collapse(true);
+    var sel = rangy.getSelection();
+    sel.setSingleRange(range);
+};
+
 /*
  * Place a bookmark on the current line being transcribed
  */
@@ -138,7 +258,10 @@ var bookmark = function() {
     console.log("BOOKMARK");
     var focus = $(':focus');
 
-    if (focus.hasClass('tText')) focus.parent().toggleClass("pullout");
+    if (focus[0].id == 'transcript-body') {
+        var curNode = rangy.getSelection().anchorNode;
+        $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pullout");
+    }
     return false;
 };
 
@@ -161,8 +284,7 @@ var createTextElement = function(id) {
     var element = $(document.createElement("p"));
     element.attr({
         "class": "tText",
-        id: "t" + id,
-        contenteditable: "true"
+        id: "t" + id
     });
     element.keydown(handleText);
 
@@ -178,10 +300,10 @@ var createTimestampElement = function(time, id) {
     element.attr({
         "class": "tStamp",
         id: "s" + id,
+        contenteditable: "false",
         "data-time": time,  //TODO can we use this instead of an explicit argument?
         "onClick": 'control.jumpTo(' + time + ')'
     });
-    //element.append('<span class="bookmark">&#8250;&#8250; </span>');
     element.append('[' + formatSecondsAsTime(time) + ']');
  
     return element;

@@ -197,6 +197,14 @@ footer {
 
 /** The transcript text **/
 
+.tTitle, .tSubTitle, #transcript-body {
+    outline: 0;
+}
+
+.tTitle, .tSubTitle, .tText {
+    word-wrap: break-word;
+}
+
 .tTitle {
     font-family: 'Montserrat', Arial, sans-serif;
     font-size: 45px;
@@ -217,11 +225,7 @@ footer {
     font-size: 18px;
     line-height: 25px;
     margin-bottom: 25px;
-}
-
-.tTitle, .tSubTitle, .tText {
-    outline: 0;
-    word-wrap: break-word;
+    min-height: 27px;
 }
 
 .tStamp {
@@ -247,12 +251,16 @@ footer {
     text-decoration: underline;
 }
 
-.empty:hover {
+.tStamp.empty:after {
     cursor: auto;
+}
+
+.empty:hover {
     text-decoration: none;
 }
 
 .empty:after {
+    cursor: text;
     content: attr(data-ghost-text);
     color: #c0c0c0;
 }
