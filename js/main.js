@@ -29,43 +29,52 @@ $(document).ready(function() {
     $('.tSubTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
 
+    //check for special keystokes in the body
     $('#transcript-body').keypress(function(event) {
-        if (event.target.children.length == 1) {
-            if (event.keyCode == 13) {
-                //if moving on from an empty first row, just give the timestamp of 0 to the first section
-                if ($('#t0').text().length === 0 && $('#s0').text().length === 0) {
-                    var s0 = $('#s0');
-                    var time = 0;
+        var t0,
+            s0,
+            time;
 
-                    //TODO repeating code here
+        //if the first section
+        if (event.target.children.length == 1) {
+            t0 = $('#t0');
+            s0 = $('#s0');
+
+            //on enter
+            if (event.keyCode == 13) {
+                //if the section is empty, add ellipsis and set its timestamp to 0
+                if (t0.text().length === 0 && s0.text().length === 0) {
+                    time = 0;
+
                     s0.append('[' + formatSecondsAsTime(time) + ']');
                     s0.attr('onClick', 'control.jumpTo(' + time + ')');
                     s0.removeClass("empty");
 
-                    var t0 = $('#t0');
-                    t0.text('...');
+                    t0.html('...');
                     t0.removeClass("empty");
                 }
 
                 addSection();
                 return false;
             }
+            //on any character
             else if (event.charCode) {
-                if ($('#t0').text().length === 0 && $('#s0').text().length === 0) {
-                    var s0 = $('#s0');
-                    var time = control.getTimestamp();
+                //if the section is empty, remove ghost text and set timestamp
+                if (t0.text().length === 0 && s0.text().length === 0) {
+                    time = control.getTimestamp();
 
                     //TODO repeating code here
                     s0.append('[' + formatSecondsAsTime(time) + ']');
                     s0.attr('onClick', 'control.jumpTo(' + time + ')');
                     s0.removeClass("empty");
 
-                    var t0 = $('#t0');
                     t0.removeClass("empty");
                 }
             }
         }
+        //if not the first section
         else {
+            //on enter
             if (event.keyCode == 13) {
                 addSection();
                 return false;
@@ -73,23 +82,35 @@ $(document).ready(function() {
         }
     });
 
+    //check for special keystrokes not captured in keypress
     $('#transcript-body').keydown(function(event) {
         if (event.target.children.length == 1) {
+            //on baspace
             if (event.keyCode == 8) {
-                if ($('#t0').text().length === 0) {
-                    return false;
-                }
+                //don't let users delete the first section
+                if ($('#t0').text().length === 0) return false;
             }
         }
     });
 
-    //on focusout, if t0 is empty and body has 1 child, add empty class and clear timestamp
+    //check focusout for the body
     $('#transcript-body').focusout(function(event) {
+        var t0,
+            s0;
+
+        //if the first section
         if (event.target.children.length == 1) {
-            if ($('#t0').text().length === 0 && !$('#t0').hasClass("empty")) {
-                $('#s0').text("");
-                $('#s0').addClass("empty");
-                $('#t0').addClass("emtpy");
+            t0 = $('#t0');
+            s0 = $('#s0');
+
+            //if the section is empty, reset
+            if (t0.text().length === 0 && !t0.hasClass("empty")) {
+                s0.html("");
+                s0.attr('onClick', '');
+                s0.addClass("empty");
+
+                t0.html("");
+                t0.addClass("emtpy");
             }
         }
     });
@@ -114,6 +135,7 @@ $(document).ready(function() {
     //init key bindings - remove default behavior first then add label
     function initCommands() {
         var ctxKey = 'alt';
+
         jwerty.key('esc', control.togglePlay, control);
         jwerty.key(ctxKey + '+h', false);
         jwerty.key(ctxKey + '+h', bookmark);
@@ -173,37 +195,34 @@ var saveToLocalStorage = function() {
  */
 var addSection = function() {
     console.log("ADD SECTION");
-    var id = ++sectionCount;
+    var id = ++sectionCount,
+        curSelection = rangy.getSelection(),
+        curRange = curSelection.getRangeAt(0),
+        curNode = curSelection.anchorNode,
+        section,
+        timestamp,
+        text;
 
-    var curSelection = rangy.getSelection();
-    var curRange = curSelection.getRangeAt(0);
-    var curNode = curSelection.anchorNode;
-
-    //make sure there's only one range
+    //Make sure there's only one range
     //TODO is this even necessary?
     if (curSelection.rangeCount > 1) return false;
 
-    //if selected a range, delete first, then continue
+    //If selected a range, delete first, then continue
     if (!curSelection.isCollapsed) {
         curRange.deleteContents();
         curRange.collapse(true);
     }
 
-    var trim = trimNode(curNode);
-
-    var section = $(document.createElement("section"));
-    var timestamp = createTimestampElement(control.getTimestamp(), id);
-    var text = createTextElement(id);
-    text.append(trim);
+    section = $(document.createElement("section"));
+    timestamp = createTimestampElement(control.getTimestamp(), id);
+    text = createTextElement(trimNode(curNode), id);
 
     section.append(timestamp);
     section.append(text);
     $(curNode.nodeType == 3 ? curNode.parentNode.parentNode : curNode.parentNode).after(section);
 
     setCursor(text);
-
-    //TODO this is going to cause problems if a timestamp is added in the middle of a longer document
-    window.scrollTo(0, document.body.scrollHeight);
+    window.scrollBy(0, section.height());
 };
 
 /*
@@ -211,10 +230,11 @@ var addSection = function() {
  */
 var bookmark = function() {
     console.log("BOOKMARK");
-    var focus = $(':focus');
+    var focus = $(':focus'),
+        curNode;
 
     if (focus[0].id == 'transcript-body') {
-        var curNode = rangy.getSelection().anchorNode;
+        curNode = rangy.getSelection().anchorNode;
         $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pullout");
     }
     return false;
@@ -232,15 +252,16 @@ var selectTranscript = function() {
 /* Utilitiy Functions */
 
 /*
- * Create a new text p element with and use the given 
- * id to name it.
+ * Create a new text p element with and use the given start
+ * text and id to name it.
  */
-var createTextElement = function(id) {
+var createTextElement = function(text, id) {
     var element = $(document.createElement("p"));
     element.attr({
         "class": "tText",
         id: "t" + id
     });
+    element.append(text);
 
     return element;
 };
@@ -270,10 +291,10 @@ var createTimestampElement = function(time, id) {
  * Expecting a text node
  */
 var trimNode = function(node) {
-    var trimmings = '';
-    var len = node.length;
-    var range = rangy.getSelection().getRangeAt(0);
-    var position = range.startOffset;
+    var range = rangy.getSelection().getRangeAt(0),
+        len = node.length,
+        position = range.startOffset,
+        trimmings = '';
     
     if (len > 0 && position < len) {
         range.setEnd(node, len);
@@ -290,10 +311,11 @@ var trimNode = function(node) {
  * Expecting an element
  */
 var setCursor = function(element) {
-    var range = rangy.createRange();
+    var sel = rangy.getSelection(),
+        range = rangy.createRange();
+
     range.selectNodeContents(element.get(0));
     range.collapse(true);
-    var sel = rangy.getSelection();
     sel.setSingleRange(range);
 };
 
@@ -305,35 +327,16 @@ var setCursor = function(element) {
  */
 var handleGhostText = function(event) {
     var target = $(event.target);
-    var len = target.text().length;
+
     if (event.type === "focusout") {
-        if (len === 0 && !target.hasClass("empty")) {
-            //show :after
+        //If empty, show :after
+        if (target.text().length === 0 && !target.hasClass("empty")) {
             target.addClass("empty");
-            //if the first section, get rid of the timestamp
-            if (target.attr('id') === "t0") {
-                var s0 = $('#s0');
-                s0.html("");
-                s0.attr('onClick', '');
-                s0.addClass("empty");
-            }
         }
     } else {
-        //For any character entered
+        //For any character entered, get rid of :after
         if (event.charCode && target.hasClass("empty")) {
-            //get rid of :after
             target.removeClass("empty");
-            //if the first section, add a timestamp
-            if (target.attr('id') === "t0") {
-                var s0 = $('#s0');
-                var time = control.getTimestamp();
-
-                //TODO repeating code here
-                //s0.append('<span class="bookmark">&#8250;&#8250; </span>');
-                s0.append('[' + formatSecondsAsTime(time) + ']');
-                s0.attr('onClick', 'control.jumpTo(' + time + ')');
-                s0.removeClass("empty");
-            }
         }
     }
 };
@@ -345,15 +348,19 @@ var handleGhostText = function(event) {
 var selectText = function(element) {
     var doc = document,
         text = doc.getElementById(element),
-        range, selection;
+        range,
+        selection;
 
     if (doc.body.createTextRange) {
         range = document.body.createTextRange();
+        
         range.moveToElementText(text);
         range.select();
-    } else if (window.getSelection) {
+    }
+    else if (window.getSelection) {
         selection = window.getSelection();
         range = document.createRange();
+        
         range.selectNodeContents(text);
         selection.removeAllRanges();
         selection.addRange(range);
