@@ -119,11 +119,11 @@ $(document).ready(function() {
     });
 
     //init chooser
-    $('#audioChooser').change(loadFile);
     $('#audioChooseNav').click(function(event) {
         $('#audioChooser').click();
         return false;
     });
+    $('#audioChooser').change(loadFile);
     
     initCommands();
 
@@ -132,18 +132,13 @@ $(document).ready(function() {
 
     //init key bindings - remove default behavior first then add label
     function initCommands() {
-        var ctxKey = 'alt';
+        var ctxKey = $('#commands').attr('data-key');
 
         jwerty.key('esc', control.togglePlay, control);
-        jwerty.key(ctxKey + '+h', false);
         jwerty.key(ctxKey + '+h', bookmark);
-        jwerty.key(ctxKey + '+j', false);
         jwerty.key(ctxKey + '+j', control.rewind, control);
-        jwerty.key(ctxKey + '+k', false);
         jwerty.key(ctxKey + '+k', control.forward, control);
-        jwerty.key(ctxKey + '+u', false);
         jwerty.key(ctxKey + '+u', control.slowdown, control);
-        jwerty.key(ctxKey + '+i', false);
         jwerty.key(ctxKey + '+i', control.speedup, control);
 
         $('#commands li').each(function() {
@@ -229,7 +224,7 @@ var bookmark = function() {
 
     if (focus[0].id == 'transcript-body') {
         curNode = rangy.getSelection().anchorNode;
-        $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pullout");
+        $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pull");
     }
     return false;
 };

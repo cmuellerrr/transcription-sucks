@@ -214,12 +214,12 @@ footer {
     color: #adadad;
 }
 
-.pullout {
+.pull {
     border-left: 2px solid #444444;
     padding-left: 10px;
 }
 
-.pullout .tText {
+.pull .tText {
     font-size: 16px;
     font-weight: 700;
     line-height: 23px;
