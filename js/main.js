@@ -56,9 +56,9 @@ $(document).ready(function() {
 
                 addSection();
                 return false;
-            }
+
             //on any character
-            else if (event.charCode) {
+            } else if (event.charCode) {
                 //if the section is empty, remove ghost text and set timestamp
                 if (t0.text().length === 0 && s0.text().length === 0) {
                     time = control.getTimestamp();
@@ -71,9 +71,7 @@ $(document).ready(function() {
                     t0.removeClass("empty");
                 }
             }
-        }
-        //if not the first section
-        else {
+        } else {
             //on enter
             if (event.keyCode == 13) {
                 addSection();
@@ -169,13 +167,9 @@ $(document).ready(function() {
         }
 
         if (url) {
-            if (this.id === 'audioChooser') {
-                control.loadAudio(url);
-            } else if (this.id === 'videoChooser') {
-                control.loadVideo(url);
-            }
-
+            control.loadAudio(url);
             $('.tTitle').focus();
+        
         } else {
             alert("NONE");
         }
@@ -333,7 +327,8 @@ var handleGhostText = function(event) {
         if (target.text().length === 0 && !target.hasClass("empty")) {
             target.addClass("empty");
         }
-    } else {
+    }
+    else {
         //For any character entered, get rid of :after
         if (event.charCode && target.hasClass("empty")) {
             target.removeClass("empty");
@@ -356,8 +351,8 @@ var selectText = function(element) {
         
         range.moveToElementText(text);
         range.select();
-    }
-    else if (window.getSelection) {
+
+    } else if (window.getSelection) {
         selection = window.getSelection();
         range = document.createRange();
         

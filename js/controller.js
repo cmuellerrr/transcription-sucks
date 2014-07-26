@@ -22,21 +22,6 @@ Controller.prototype.loadAudio = function(url) {
     this.media.load();
 };
 
-/*
- * Load the given video file into the controller
- */
-Controller.prototype.loadVideo = function(url) {
-    console.log("Loading video");
-
-    this.media = $('#videoPlayer')[0];
-
-    //load the file
-    //this.media.src = url;
-    //this.media.playbackRate = 1;
-};
-
-
-
 /** Source playback functions **/
 
 
@@ -114,14 +99,4 @@ Controller.prototype.slowdown = function() {
 Controller.prototype.getTimestamp = function() {
     console.log("GET TIMESTAMP");
     return Math.floor(this.media.currentTime);
-};
-
-/*
- * If currently playing a video, take a screenshot
- */
-Controller.prototype.getScreenshot = function() {
-    if (this.media.id === 'videoPlayer') {
-        console.log("GET SCREENSHOT");
-    }
-    return false;
 };
