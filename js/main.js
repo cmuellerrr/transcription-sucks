@@ -108,7 +108,7 @@ $(document).ready(function() {
                 s0.addClass("empty");
 
                 t0.html("");
-                t0.addClass("emtpy");
+                t0.addClass("empty");
             }
         }
     });

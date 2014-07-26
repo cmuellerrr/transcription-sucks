@@ -240,6 +240,6 @@ footer {
 
 .empty:after {
     cursor: text;
-    content: attr(data-ghost-text);
+    content: attr(data-placeholder);
     color: #c0c0c0;
 }
