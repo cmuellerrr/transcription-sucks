@@ -1,27 +1,14 @@
-var seekDelta = 2,
-    rateDelta = 0.2,
-    jumpBuffer = 0.5,
-    sectionCount = 0,
+var sectionCount = 0,
     control,
     storage;
 
 $(document).ready(function() {
-    //load from storage
-    if ('localStorage' in window && window['localStorage'] !== null) {
-        storage = window.localStorage;
-        
-        if(storage.getItem('transcript')) {
-            console.log("RESTORING FROM CACHE");
-
-            $('#transcript').html(storage['transcript']);
-            sectionCount = parseInt(storage['sectionCount'], 10);
-        }
-    }
-
     //audiojs.events.ready(function() {
     //    var as = audiojs.create($('#audioPlayer')[0]);
     //});
-    control = new Controller($('#audioPlayer')[0]);
+    control = mediaController($('#audioPlayer'));
+
+    loadLocalStorage();
 
     //init text placeholders
     $('.tTitle').keypress(handleGhostText);
@@ -134,16 +121,31 @@ $(document).ready(function() {
     function initCommands() {
         var ctxKey = $('#commands').attr('data-key');
 
-        jwerty.key('esc', control.togglePlay, control);
+        jwerty.key('esc', control.togglePlay);
         jwerty.key(ctxKey + '+h', bookmark);
-        jwerty.key(ctxKey + '+j', control.rewind, control);
-        jwerty.key(ctxKey + '+k', control.forward, control);
-        jwerty.key(ctxKey + '+u', control.slowdown, control);
-        jwerty.key(ctxKey + '+i', control.speedup, control);
+        jwerty.key(ctxKey + '+j', control.rewind);
+        jwerty.key(ctxKey + '+k', control.forward);
+        jwerty.key(ctxKey + '+u', control.slowdown);
+        jwerty.key(ctxKey + '+i', control.speedup);
 
         $('#commands li').each(function() {
             $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
         });
+    }
+
+    //load transcript from local storage
+    function loadLocalStorage() {
+        //load from storage
+        if ('localStorage' in window && window['localStorage'] !== null) {
+            storage = window.localStorage;
+            
+            if(storage.getItem('transcript')) {
+                console.log("RESTORING FROM CACHE");
+
+                $('#transcript').html(storage['transcript']);
+                sectionCount = parseInt(storage['sectionCount'], 10);
+            }
+        }
     }
 
     //handle the loading of source material
@@ -170,6 +172,21 @@ $(document).ready(function() {
         }
     }
 });
+
+/*
+ * Place a bookmark on the current line being transcribed
+ */
+var bookmark = function() {
+    console.log("BOOKMARK");
+    var focus = $(':focus'),
+        curNode;
+
+    if (focus[0].id == 'transcript-body') {
+        curNode = rangy.getSelection().anchorNode;
+        $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pull");
+    }
+    return false;
+};
 
 var saveToLocalStorage = function() {
     if (storage && $("#autosaveBtn").hasClass('btn-active')) {
@@ -212,21 +229,6 @@ var addSection = function() {
 
     setCursor(text);
     window.scrollBy(0, section.height());
-};
-
-/*
- * Place a bookmark on the current line being transcribed
- */
-var bookmark = function() {
-    console.log("BOOKMARK");
-    var focus = $(':focus'),
-        curNode;
-
-    if (focus[0].id == 'transcript-body') {
-        curNode = rangy.getSelection().anchorNode;
-        $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pull");
-    }
-    return false;
 };
 
 /*

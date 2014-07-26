@@ -1,102 +1,82 @@
-/** The media Controller object **/
+//The media controller object
+var mediaController = function(element) {
+    var seekDelta = 2,
+        rateDelta = 0.2,
+        jumpBuffer = 0.5,
+        media = element[0];
 
+    return {
+        //Load the given audio file into the controller
+        //TODO speed this up
+        loadAudio: function(url) {
+            console.log("LOADING");
+            media.src = url;
+            media.playbackRate = 1;
+            media.play();
+            media.pause();
+            media.load();
+        },
 
-function Controller(audioElement) {
-    this.media = audioElement;
-}
+        //Toggle playback of the current media
+        togglePlay: function() {
+            if(media.paused) {
+                console.log("PLAY");
+                //Rewind a little after pausing
+                if (media.currentTime >= jumpBuffer) {
+                    media.currentTime -= jumpBuffer;
+                }
+                media.play();
+            } else {
+                console.log("PAUSE");
+                media.pause();
+            }
+            return false;
+        },
 
-/*
- * Load the given audio file into the controller
- * TODO speed this up
- */
-Controller.prototype.loadAudio = function(url) {
-    console.log("Loading audio");
+        //Fast forward the current media by the set delta.
+        forward: function() {
+            console.log("FF");
+            media.currentTime += seekDelta;
+            return false;
+        },
 
-    this.media = $('#audioPlayer')[0];
-    
-    //load the file
-    this.media.src = url;
-    this.media.playbackRate = 1;
-    this.media.play();
-    this.media.pause();
-    this.media.load();
-};
+        //Rewind the current media by the set delta.
+        rewind: function() {
+            console.log("RW");
+            media.currentTime -= seekDelta;
+            return false;
+        },
 
-/** Source playback functions **/
+        //Jump to the given location.
+        jumpTo: function(time) {
+            console.log("JUMP");
+            if (time >= jumpBuffer) time -= jumpBuffer;
+            if (media.duration >= time) media.currentTime = time;
+            return false;
+        },
 
+        //Increase the current playback speed by the set delta
+        speedup: function() {
+            console.log("FASTER");
+            if (media.playbackRate <= (2.0 - rateDelta)) {
+                media.playbackRate += rateDelta;
+            }
+            return false;
+        },
 
-/*
- * Toggle playback of the current media.
- */
-Controller.prototype.togglePlay = function() {
-    if(this.media.paused) {
-        console.log("PLAY");
-        //Rewind a little after pausing
-        if (this.media.currentTime >= jumpBuffer) {
-            this.media.currentTime -= jumpBuffer;
+        //Decrease the current playback speed by the set delta
+        slowdown: function() {
+            console.log("SLOWER");
+            if (media.playbackRate >= (0.5 + rateDelta)) {
+                media.playbackRate -= rateDelta;
+            }
+            return false;
+        },
+        
+        //Get the current time stamp of the playing media.
+        getTimestamp: function() {
+            console.log("GET TIMESTAMP");
+            return Math.floor(media.currentTime);
         }
-        this.media.play();
-    } else {
-        console.log("PAUSE");
-        this.media.pause();
-    }
-    return false;
-};
-
-/*
- * Fast forward the current media by the set delta.
- */
-Controller.prototype.forward = function() {
-    console.log("FF");
-    this.media.currentTime += seekDelta;
-    return false;
-};
-
-/*
- * Rewind the current media by the set delta.
- */
-Controller.prototype.rewind = function() {
-    console.log("RW");
-    this.media.currentTime -= seekDelta;
-    return false;
-};
-
-/*
- * Jump to the given location.
- */
-Controller.prototype.jumpTo = function(time) {
-    console.log("JUMP");
-    if (time >= jumpBuffer) time -= jumpBuffer;
-    if (this.media.duration >= time) this.media.currentTime = time;
-    return false;
-};
-
-/*
- * Increase the current playback speed by the set delta
- */
-Controller.prototype.speedup = function() {
-    console.log("FASTER");
-    if (this.media.playbackRate <= (2.0 - rateDelta)) {
-        this.media.playbackRate += rateDelta;
-    }
-    return false;
-};
-
-/*
- * Decrease the current playback speed by the set delta
- */
-Controller.prototype.slowdown = function() {
-    console.log("SLOWER");
-    if (this.media.playbackRate >= (0.5 + rateDelta)) {
-        this.media.playbackRate -= rateDelta;
-    }
-    return false;
-};
-
-/*
- * Get the current time stamp of the playing media.
- */
-Controller.prototype.getTimestamp = function() {
-    console.log("GET TIMESTAMP");
-    return Math.floor(this.media.currentTime);
+    };
 };
