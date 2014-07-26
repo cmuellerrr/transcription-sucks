@@ -24,10 +24,39 @@ $(document).ready(function() {
         stop: saveToLocalStorage,
         delay: 2000
     });
-    $('.tTitle').keypress(handleGhostText);
     $('.tTitle').focusout(handleGhostText);
-    $('.tSubTitle').keypress(handleGhostText);
+    $('.tTitle').keypress(handleGhostText);
     $('.tSubTitle').focusout(handleGhostText);
+    $('.tSubTitle').keypress(handleGhostText);
+    $('.tSubTitle').keydown(function(event) {
+        //on tab
+        if (event.keyCode == 9 && !event.shiftKey) {
+            setCursor($('#t0'));
+            return false;
+        }
+    });
+
+    //check focusout for the body
+    $('#transcript-body').focusout(function(event) {
+        var t0,
+            s0;
+
+        //if the first section
+        if (event.target.children.length == 1) {
+            t0 = $('#t0');
+            s0 = $('#s0');
+
+            //if the section is empty, reset
+            if (t0.text().length === 0 && !t0.hasClass("empty")) {
+                s0.html("");
+                s0.attr('onClick', '');
+                s0.addClass("empty");
+
+                t0.html("");
+                t0.addClass("empty");
+            }
+        }
+    });
 
     //check for special keystokes in the body
     $('#transcript-body').keypress(function(event) {
@@ -87,28 +116,6 @@ $(document).ready(function() {
             if (event.keyCode == 8) {
                 //don't let users delete the first section
                 if ($('#t0').text().length === 0) return false;
-            }
-        }
-    });
-
-    //check focusout for the body
-    $('#transcript-body').focusout(function(event) {
-        var t0,
-            s0;
-
-        //if the first section
-        if (event.target.children.length == 1) {
-            t0 = $('#t0');
-            s0 = $('#s0');
-
-            //if the section is empty, reset
-            if (t0.text().length === 0 && !t0.hasClass("empty")) {
-                s0.html("");
-                s0.attr('onClick', '');
-                s0.addClass("empty");
-
-                t0.html("");
-                t0.addClass("empty");
             }
         }
     });
