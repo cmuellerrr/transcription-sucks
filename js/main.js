@@ -3,14 +3,25 @@ var sectionCount = 0,
     storage;
 
 $(document).ready(function() {
-    //audiojs.events.ready(function() {
-    //    var as = audiojs.create($('#audioPlayer')[0]);
-    //});
     control = mediaController($('#audioPlayer'));
 
-    loadLocalStorage();
+    initCommands();
+    loadFromLocalStorage();
 
-    //init text placeholders
+    //init ui bindings
+    $('.toggle').click(function(event) {
+        $(event.target).toggleClass("btn-active");
+    });
+
+    //init chooser
+    $('#audioChooser').change(loadFile);
+    $('#audioChooseNav').click(function(event) {
+        $('#audioChooser').click();
+    });
+
+    //init event handlers
+    $('.editor').keyup(saveToLocalStorage);
+    $('.editor').focusout(saveToLocalStorage);
     $('.tTitle').keypress(handleGhostText);
     $('.tTitle').focusout(handleGhostText);
     $('.tSubTitle').keypress(handleGhostText);
@@ -100,23 +111,6 @@ $(document).ready(function() {
         }
     });
 
-    //init ui bindings
-    $('.toggle').click(function(event) {
-        $(event.target).toggleClass("btn-active");
-    });
-
-    //init chooser
-    $('#audioChooseNav').click(function(event) {
-        $('#audioChooser').click();
-        return false;
-    });
-    $('#audioChooser').change(loadFile);
-    
-    initCommands();
-
-    $('.editor').keyup(saveToLocalStorage);
-    $('.editor').focusout(saveToLocalStorage);
-
     //init key bindings - remove default behavior first then add label
     function initCommands() {
         var ctxKey = $('#commands').attr('data-key');
@@ -133,45 +127,77 @@ $(document).ready(function() {
         });
     }
 
-    //load transcript from local storage
-    function loadLocalStorage() {
-        //load from storage
-        if ('localStorage' in window && window['localStorage'] !== null) {
-            storage = window.localStorage;
-            
-            if(storage.getItem('transcript')) {
-                console.log("RESTORING FROM CACHE");
+    //Handle the use of ghost text for the titles and first paragraph.
+    //If text is entered, remove the ghost text, if there is no text
+    //when the field loses focus, put it back.
+    function handleGhostText(event) {
+        var target = $(event.target);
 
-                $('#transcript').html(storage['transcript']);
-                sectionCount = parseInt(storage['sectionCount'], 10);
+        if (event.type === "focusout") {
+            //If empty, show :after
+            if (target.text().length === 0 && !target.hasClass("empty")) {
+                target.addClass("empty");
+            }
+        }
+        else {
+            //For any character entered, get rid of :after
+            if (event.charCode && target.hasClass("empty")) {
+                target.removeClass("empty");
             }
         }
     }
+});
 
-    //handle the loading of source material
-    function loadFile() {
-        var source = this.files[0],
-            url;
+//handle the loading of source material
+var loadFile = function() {
+    var source = this.files[0],
+        url;
 
-        if (window.webkitURL) {
-            url = window.webkitURL.createObjectURL(source);
+    if (window.webkitURL) {
+        url = window.webkitURL.createObjectURL(source);
 
-        } else if (window.URL) {
-            url = window.URL.createObjectURL(source);
+    } else if (window.URL) {
+        url = window.URL.createObjectURL(source);
 
-        } else if (window.createObjectURL) {
-            url = window.createObjectURL(source);
-        }
+    } else if (window.createObjectURL) {
+        url = window.createObjectURL(source);
+    }
 
-        if (url) {
-            control.loadAudio(url);
-            $('.tTitle').focus();
+    if (url) {
+        control.loadAudio(url);
+        $('.tTitle').focus();
         
-        } else {
-            alert("NONE");
+    } else {
+        alert("NONE");
+    }
+};
+
+/*
+ * Load the transcript from the browser's cache if it exists
+ */
+var loadFromLocalStorage = function() {
+    //load from storage
+    if ('localStorage' in window && window['localStorage'] !== null) {
+        storage = window.localStorage;
+            
+        if(storage.getItem('transcript')) {
+            console.log("RESTORING FROM CACHE");
+
+            $('#transcript').html(storage['transcript']);
+            sectionCount = parseInt(storage['sectionCount'], 10);
         }
     }
-});
+};
+
+/*
+ * Save the transcript to the browser's cache
+ */
+var saveToLocalStorage = function() {
+    if (storage && $("#autosaveBtn").hasClass('btn-active')) {
+        storage['transcript'] = $('#transcript').html();
+        storage['sectionCount'] = sectionCount;
+    }
+};
 
 /*
  * Place a bookmark on the current line being transcribed
@@ -186,13 +212,6 @@ var bookmark = function() {
         $(curNode.nodeType == 3 ? curNode.parentNode : curNode).parent().toggleClass("pull");
     }
     return false;
-};
-
-var saveToLocalStorage = function() {
-    if (storage && $("#autosaveBtn").hasClass('btn-active')) {
-        storage['transcript'] = $('#transcript').html();
-        storage['sectionCount'] = sectionCount;
-    }
 };
 
 /*
@@ -232,17 +251,6 @@ var addSection = function() {
 };
 
 /*
- * Select all of the transcript text so the user can copy/paste
- * into whatever they want.
- */
-var selectTranscript = function() {
-    selectText('transcript');
-};
-
-
-/* Utilitiy Functions */
-
-/*
  * Create a new text p element with and use the given start
  * text and id to name it.
  */
@@ -275,6 +283,47 @@ var createTimestampElement = function(time, id) {
     return element;
 };
 
+/* Utilitiy Functions */
+
+/*
+ * Select all of the transcript text. To aid copy/paste.
+ * via Jason Edelman: http://stackoverflow.com/a/987376
+ */
+var selectTranscript = function() {
+    var text = document.getElementById('transcript'),
+        range,
+        selection;
+
+    if (document.body.createTextRange) {
+        range = document.body.createTextRange();
+        
+        range.moveToElementText(text);
+        range.select();
+
+    } else if (window.getSelection) {
+        selection = window.getSelection();
+        range = document.createRange();
+        
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+};
+
+/*
+ * Set the cursor to the beginning of the given element.
+ *
+ * Expecting an element
+ */
+var setCursor = function(element) {
+    var sel = rangy.getSelection(),
+        range = rangy.createRange();
+
+    range.selectNodeContents(element.get(0));
+    range.collapse(true);
+    sel.setSingleRange(range);
+};
+
 /*
  * Trim the text off the given node which occurs after the 
  * selection point. Return the trimmed text.
@@ -294,69 +343,6 @@ var trimNode = function(node) {
     }
 
     return trimmings;
-};
-
-/*
- * Set the cursor to the beginning of the given element.
- *
- * Expecting an element
- */
-var setCursor = function(element) {
-    var sel = rangy.getSelection(),
-        range = rangy.createRange();
-
-    range.selectNodeContents(element.get(0));
-    range.collapse(true);
-    sel.setSingleRange(range);
-};
-
-
-/*
- * Handle the use of ghost text for the titles and first paragraph.
- * If text is entered, remove the ghost text, if there is no text
- * when the field loses focus, put it back.
- */
-var handleGhostText = function(event) {
-    var target = $(event.target);
-
-    if (event.type === "focusout") {
-        //If empty, show :after
-        if (target.text().length === 0 && !target.hasClass("empty")) {
-            target.addClass("empty");
-        }
-    }
-    else {
-        //For any character entered, get rid of :after
-        if (event.charCode && target.hasClass("empty")) {
-            target.removeClass("empty");
-        }
-    }
-};
-
-/*
- * Select the element with the given id.
- * via Jason Edelman: http://stackoverflow.com/a/987376
- */
-var selectText = function(element) {
-    var doc = document,
-        text = doc.getElementById(element),
-        range,
-        selection;
-
-    if (doc.body.createTextRange) {
-        range = document.body.createTextRange();
-        
-        range.moveToElementText(text);
-        range.select();
-
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        
-        range.selectNodeContents(text);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
 };
 
 /*
