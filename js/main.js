@@ -20,8 +20,10 @@ $(document).ready(function() {
     });
 
     //init event handlers
-    $('.editor').keyup(saveToLocalStorage);
-    $('.editor').focusout(saveToLocalStorage);
+    $('.editor').typing({
+        stop: saveToLocalStorage,
+        delay: 2000
+    });
     $('.tTitle').keypress(handleGhostText);
     $('.tTitle').focusout(handleGhostText);
     $('.tSubTitle').keypress(handleGhostText);
@@ -194,6 +196,7 @@ var loadFromLocalStorage = function() {
  */
 var saveToLocalStorage = function() {
     if (storage && $("#autosaveBtn").hasClass('btn-active')) {
+        console.log("SAVING");
         storage['transcript'] = $('#transcript').html();
         storage['sectionCount'] = sectionCount;
     }
