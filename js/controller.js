@@ -11,10 +11,10 @@ var mediaController = function(element) {
         loadAudio: function(url) {
             console.log("LOADING");
             media.src = url;
+            media.load();
             media.playbackRate = 1;
             media.play();
             media.pause();
-            media.load();
         },
 
         //Toggle playback of the current media
