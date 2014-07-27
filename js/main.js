@@ -160,25 +160,15 @@ $(document).ready(function() {
 
 //handle the loading of source material
 var loadFile = function() {
-    var source = this.files[0],
-        url;
-
-    if (window.webkitURL) {
-        url = window.webkitURL.createObjectURL(source);
-
-    } else if (window.URL) {
-        url = window.URL.createObjectURL(source);
-
-    } else if (window.createObjectURL) {
-        url = window.createObjectURL(source);
-    }
+    var URL = window.webkitURL || window.URL,
+        url = URL.createObjectURL(this.files[0]);
 
     if (url) {
         control.loadAudio(url);
         $('.tTitle').focus();
         
     } else {
-        alert("NONE");
+        alert("Error loading audio file");
     }
 };
 
