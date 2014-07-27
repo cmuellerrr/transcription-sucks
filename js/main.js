@@ -17,6 +17,7 @@ $(document).ready(function() {
     $('#audioChooser').change(loadFile);
     $('#audioChooseNav').click(function(event) {
         $('#audioChooser').click();
+        return false;
     });
 
     //init event handlers
