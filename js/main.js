@@ -112,12 +112,23 @@ $(document).ready(function() {
 
     //check for special keystrokes not captured in keypress
     $('#transcript-body').keydown(function(event) {
+        //if the first section
         if (event.target.children.length == 1) {
             //on baspace
             if (event.keyCode == 8) {
                 //don't let users delete the first section
                 if ($('#t0').text().length === 0) return false;
             }
+        }
+    });
+
+    //firefox has a problem with clicking on the placeholder text
+    //so we need to manually set it
+    $('#t0').click(function(event) {
+        var t0 = $('#t0');
+
+        if (t0.text().length === 0) {
+            setCursor(t0);
         }
     });
 

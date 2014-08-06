@@ -238,7 +238,7 @@ footer {
     text-decoration: none;
 }
 
-.empty:after {
+.empty:before {
     cursor: text;
     content: attr(data-placeholder);
     color: #c0c0c0;
