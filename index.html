@@ -13,16 +13,16 @@
     <script type="text/javascript" src="js/rangy-core.js"></script>
     <script type="text/javascript" src="js/jquery.typing-0.2.0.min.js"></script>
 
-    <script type="text/javascript" src="js/controller.js"></script>
+    <script type="text/javascript" src="js/mediacontroller.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </head>
 
 <body>
 <header>
     <div id="buttonContainer">
-        <a class="logo"/>ts</a>
+        <a class="logo">ts</a>
         <a class="btn toggle" id="autosaveBtn">Autosave</a>
-        <a class="btn" onclick="selectTranscript();"/>Select Text</a>
+        <a class="btn" onclick="selectTranscript();">Select Text</a>
     </div>
 </header>
 
@@ -42,23 +42,18 @@
     </div>
     
     <div class="editor">
-        <input id="audioChooser" type="file" accept="audio/*"/><a href id="audioChooseNav"></a>
+        <input id="audioChooser" class="chooser" type="file" accept="audio/*"/><a href id="audioChooseNav"></a>
         <div id="transcript">
-            <h1 class="tTitle empty" contenteditable="true" data-placeholder="Title"></h1>
-            <h2 class="tSubTitle empty" contenteditable="true" data-placeholder="Subtitle"></h2>
-            <div id="transcript-body" contenteditable="true">
-                <section>
-                    <p class="tStamp empty" id="s0" contenteditable="false" data-placeholder="[0:00:00]"></p>
-                    <p class="tText empty" id="t0" data-placeholder="Start typing here - timestamps will take care of themselves..."></p>
-                </section>
-            </div>
+            <input class="tTitle" placeholder="Title"/>
+            <input class="tSubTitle" placeholder="Subtitle"/>
+            <textarea class="tText" id="tBody" placeholder="[00:00:00] Start typing here - timestamps will take care of themselves..."></textarea>
         </div>
     </div>
 </div>
 
 <footer>
     <div class="credits">
-        <p><a href="https://github.com/cmuellerrr/transcription-sucks/archive/master.zip"/>Download</a> for use offline.</p>
+        <p><a href="https://github.com/cmuellerrr/transcription-sucks/archive/master.zip">Download</a> for use offline.</p>
         <p>Made by <a href="http://www.iammueller.com" target="_blank">Chris</a></p>
     </div>    
 </footer>

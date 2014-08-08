@@ -1,12 +1,12 @@
 var sectionCount = 0,
-    control,
+    controller,
     storage;
 
 $(document).ready(function() {
-    control = mediaController($('#audioPlayer'));
+    controller = mediaController($('#audioPlayer'));
 
     initCommands();
-    loadFromLocalStorage();
+    //loadFromLocalStorage();
 
     //init ui bindings
     $('.toggle').click(function(event) {
@@ -21,114 +21,28 @@ $(document).ready(function() {
     });
 
     //init event handlers
-    $('.editor').typing({
-        stop: saveToLocalStorage,
-        delay: 2000
-    });
-    $('.tTitle').focusout(handleGhostText);
-    $('.tTitle').keypress(handleGhostText);
-    $('.tSubTitle').focusout(handleGhostText);
-    $('.tSubTitle').keypress(handleGhostText);
-    $('.tSubTitle').keydown(function(event) {
-        //on tab
-        if (event.keyCode == 9 && !event.shiftKey) {
-            setCursor($('#t0'));
-            return false;
-        }
-    });
-
-    //check focusout for the body
-    $('#transcript-body').focusout(function(event) {
-        var t0,
-            s0;
-
-        //if the first section
-        if (event.target.children.length == 1) {
-            t0 = $('#t0');
-            s0 = $('#s0');
-
-            //if the section is empty, reset
-            if (t0.text().length === 0 && !t0.hasClass("empty")) {
-                s0.html("");
-                s0.attr('onClick', '');
-                s0.addClass("empty");
-
-                t0.html("");
-                t0.addClass("empty");
-            }
-        }
-    });
+    //$('.editor').typing({
+   //    stop: saveToLocalStorage,
+   //     delay: 2000
+   // });
 
     //check for special keystokes in the body
-    $('#transcript-body').keypress(function(event) {
-        var t0,
-            s0,
-            time;
+    $('#tBody').keypress(function(event) {
+        var body = $('#tBody')[0];
 
-        //if the first section
-        if (event.target.children.length == 1) {
-            t0 = $('#t0');
-            s0 = $('#s0');
-
-            //on enter
-            if (event.keyCode == 13) {
-                //if the section is empty, add ellipsis and set its timestamp to 0
-                if (t0.text().length === 0 && s0.text().length === 0) {
-                    time = 0;
-
-                    s0.append('[' + formatSecondsAsTime(time) + ']');
-                    s0.attr('onClick', 'control.jumpTo(' + time + ')');
-                    s0.removeClass("empty");
-
-                    t0.html('...');
-                    t0.removeClass("empty");
-                }
-
-                addSection();
-                return false;
-
-            //on any character
-            } else if (event.charCode) {
-                //if the section is empty, remove ghost text and set timestamp
-                if (t0.text().length === 0 && s0.text().length === 0) {
-                    time = control.getTimestamp();
-
-                    //TODO repeating code here
-                    s0.append('[' + formatSecondsAsTime(time) + ']');
-                    s0.attr('onClick', 'control.jumpTo(' + time + ')');
-                    s0.removeClass("empty");
-
-                    t0.removeClass("empty");
-                }
+        //on enter
+        if (event.keyCode == 13) {
+            //if the section is empty, add ellipsis and set its timestamp to 0
+            if (body.value.length === 0) {
+                addTimestampAtCursor(0);
+                body.value += '...';
             }
-        } else {
-            //on enter
-            if (event.keyCode == 13) {
-                addSection();
-                return false;
-            }
+
+            addTimestampAtCursor(controller.getTimestamp());
+            return false;
         }
-    });
-
-    //check for special keystrokes not captured in keypress
-    $('#transcript-body').keydown(function(event) {
-        //if the first section
-        if (event.target.children.length == 1) {
-            //on baspace
-            if (event.keyCode == 8) {
-                //don't let users delete the first section
-                if ($('#t0').text().length === 0) return false;
-            }
-        }
-    });
-
-    //firefox has a problem with clicking on the placeholder text
-    //so we need to manually set it
-    $('#t0').click(function(event) {
-        var t0 = $('#t0');
-
-        if (t0.text().length === 0) {
-            setCursor(t0);
+        else if (event.charCode && body.value.length === 0) {
+            addTimestampAtCursor(controller.getTimestamp());
         }
     });
 
@@ -136,38 +50,44 @@ $(document).ready(function() {
     function initCommands() {
         var ctxKey = $('#commands').attr('data-key');
 
-        jwerty.key('esc', control.togglePlay);
+        jwerty.key('esc', controller.togglePlay);
         jwerty.key(ctxKey + '+h', bookmark);
-        jwerty.key(ctxKey + '+j', control.rewind);
-        jwerty.key(ctxKey + '+k', control.forward);
-        jwerty.key(ctxKey + '+u', control.slowdown);
-        jwerty.key(ctxKey + '+i', control.speedup);
+        jwerty.key(ctxKey + '+j', controller.rewind);
+        jwerty.key(ctxKey + '+k', controller.forward);
+        jwerty.key(ctxKey + '+u', controller.slowdown);
+        jwerty.key(ctxKey + '+i', controller.speedup);
 
         $('#commands li').each(function() {
             $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
         });
     }
-
-    //Handle the use of ghost text for the titles and first paragraph.
-    //If text is entered, remove the ghost text, if there is no text
-    //when the field loses focus, put it back.
-    function handleGhostText(event) {
-        var target = $(event.target);
-
-        if (event.type === "focusout") {
-            //If empty, show :after
-            if (target.text().length === 0 && !target.hasClass("empty")) {
-                target.addClass("empty");
-            }
-        }
-        else {
-            //For any character entered, get rid of :after
-            if (event.charCode && target.hasClass("empty")) {
-                target.removeClass("empty");
-            }
-        }
-    }
 });
+
+//pre = text before start
+//post = text after end
+//body = pre + stamp + post
+var addTimestampAtCursor = function(time) {
+    var node = $('#tBody')[0],
+        text = node.value,
+        startPos = node.selectionStart,
+        endPos = node.selectionEnd,
+        stamp = formatSecondsAsTimestamp(time) + ' ';
+
+    if (text.length > 0) {
+        stamp = '\n\n' + stamp;
+    }
+
+    if (node.selectionDirection === "backwards") {
+        startPos = endPos;
+        endPos = node.selectionStart;
+    }
+
+    node.value = text.substring(0, startPos) +
+                 stamp +
+                 text.substring(endPos, text.length);
+    node.selectionStart = startPos + stamp.length;
+    node.selectionEnd = startPos + stamp.length;
+};
 
 //handle the loading of source material
 var loadFile = function() {
@@ -175,7 +95,7 @@ var loadFile = function() {
         url = URL.createObjectURL(this.files[0]);
 
     if (url) {
-        control.loadAudio(url);
+        controller.loadAudio(url);
         $('.tTitle').focus();
         
     } else {
@@ -251,7 +171,7 @@ var addSection = function() {
     }
 
     section = $(document.createElement("section"));
-    timestamp = createTimestampElement(control.getTimestamp(), id);
+    timestamp = createTimestampElement(controller.getTimestamp(), id);
     text = createTextElement(trimNode(curNode), id);
 
     section.append(timestamp);
@@ -288,9 +208,9 @@ var createTimestampElement = function(time, id) {
         id: "s" + id,
         contenteditable: "false",
         "data-time": time,  //TODO can we use this instead of an explicit argument?
-        "onClick": 'control.jumpTo(' + time + ')'
+        "onClick": 'controller.jumpTo(' + time + ')'
     });
-    element.append('[' + formatSecondsAsTime(time) + ']');
+    element.append(formatSecondsAsTimestamp(time));
  
     return element;
 };
@@ -360,7 +280,7 @@ var trimNode = function(node) {
 /*
  * Format the given number of seconds as hh:mm:ss
  */
-var formatSecondsAsTime = function(secs) {
+var formatSecondsAsTimestamp = function(secs) {
     var hr  = Math.floor(secs / 3600),
         min = Math.floor((secs - (hr * 3600))/60),
         sec = Math.floor(secs - (hr * 3600) -  (min * 60));
@@ -372,5 +292,5 @@ var formatSecondsAsTime = function(secs) {
       sec  = "0" + sec;
     }
 
-    return hr + ':' + min + ':' + sec;
+    return '[' + hr + ':' + min + ':' + sec + ']';
 };
