@@ -1,20 +1,23 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 @import url(http://fonts.googleapis.com/css?family=Lora:400,700);
 
+* { 
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
 
-html, body, .container {
+html, body {
     height: 100%;
 }
 
 body {
-	font-size: 13px;
-	font-family: 'Lora', Georgia, serif;
-    color: #444444;
     min-width: 1080px;
-}
-
-a {
+	font-size: 13px;
+	font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 400;
     color: #444444;
+    background-color: #f5f5f5;
 }
 
 b {
@@ -22,118 +25,75 @@ b {
 }
 
 input:focus,
-select:focus,
 textarea:focus,
 button:focus {
     outline: none;
 }
 
-
-/** Custom UI Elements **/
-
-.btn {
-    position: relative;
+button {
     display: block;
-    float: left;
-    height: 23px;
-    margin: 0 0 0 5px;
-    padding: 0 7px;
-    border: 1px solid #c0c0c0;
-    color: #c0c0c0;
-    font-size: 13px;
-    line-height: 20px;
-    text-decoration: none;
-    -webkit-font-smoothing: antialiased;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: white;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: -moz-none;
-    -o-user-select: none;
-    user-select: none;
-    cursor: pointer;
+    background-color: #f5f5f5;
+    border: 3px solid #adadad;
+    -webkit-border-radius: 4px; /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+    -moz-border-radius: 4px; /* Firefox 1-3.6 */
+    border-radius: 4px; /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+    color: #adadad;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-.btn:active, .btn-active {
-    color: white;
-    background-color: #c0c0c0;
+button:hover {
+    border-color: #7e3c82;
+    color: #7e3c82;
 }
 
 
-/** Navigation **/
+/** Make placeholder text consistent **/
 
-header {
-    width: 100%;
-    position: fixed;
-    top: 0;
+::-webkit-input-placeholder {
+   color: #c0c0c0;
 }
 
-#buttonContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    margin: 10px;
+:-moz-placeholder { /* Firefox 18- */
+   color: #c0c0c0;  
 }
 
-.logo {
-    position: relative;
-    display: block;
-    float: left;
-    width: 25px;
-    height: 25px;
-    text-align: center;
-    font-size: 13px;
-    line-height: 23px;
-    color: white;
-    background-color: #2980b9;
-    background-size: cover;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    overflow: hidden;
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #c0c0c0;  
 }
 
-footer {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-}
-
-.credits {
-    margin: 10px;
-}
-
-.credits p {
-    margin-top: 3px;
-    font-size: 11px;
+:-ms-input-placeholder {  
+   color: #c0c0c0;  
 }
 
 
 /** General **/
 
-.container {
+.content {
     position: relative;
     width: 650px;
     margin: auto;
 }
 
 
+/** The chooser**/
+
+#audioChooser {
+    opacity: 0;
+    position: absolute;
+    top: -40px;
+}
+
+#audioChooserBtn {
+    margin: 40px auto;
+    width: 109px;
+}
+
 
 /** The Source bar - holds the audio/video players **/
 
 .source {
-    position: fixed;
-    top: 0;
-    background-color: white;
-}
-
-.commands li {
-    display: inline-block;
-    margin-right: 15px;
-    font-size: 10px;
-    color: #adadad;
+    width: 100%;
 }
 
 #audioBar {
@@ -141,40 +101,40 @@ footer {
 }
 
 #audioPlayer {
-    width: 650px;
-    padding: 10px 0;
+    width: 100%;
 }
 
 
+/** The list of commands **/
 
-/** The editor portion **/
-
-.editor {
-    padding: 130px 0;
+.side-content {
+    position: relative;
+    width: 930px;
+    margin: auto;
 }
 
-.chooser {
-    opacity: 0;
-    position: absolute;
-    top: -40px;
+.commands {
+    float: right;
 }
 
-#audioChooseNav {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    margin: 0 15px 15px 0;
-    background-image: url('../img/add_audio.svg');
-    background-size: 40px 40px;
-    background-repeat:no-repeat;
-}
-
-#audioChooseNav:hover {
-    background-image: url('../img/add_audio_hover.svg');
+.commands li {
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #c0c0c0;
 }
 
 
 /** The transcript text **/
+
+.transcript .content {
+    padding: 20px;
+    background-color: white;
+    -webkit-border-radius: 5px; /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+    -moz-border-radius: 5px; /* Firefox 1-3.6 */
+    border-radius: 5px; /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+    -mox-box-shadow: 0 1px 1px #bbbbbb;
+    box-shadow: 0 1px 1px #bbbbbb;
+}
 
 .tTitle, .tSubTitle, .tText {
     display: block;
@@ -185,16 +145,13 @@ footer {
 }
 
 .tTitle {
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-size: 45px;
+    font-size: 35px;
     font-weight: 700;
     margin-bottom: 8px;
 }
 
 .tSubTitle {
-    font-family: 'Montserrat', Arial, sans-serif;
     font-size: 20px;
-    font-weight: 400;
     font-style: italic;
     margin-bottom: 50px;
     color: #adadad;
@@ -202,10 +159,33 @@ footer {
 
 .tText {
     font-family: 'Lora', Georgia, serif;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 25px;
     margin-bottom: 25px;
     min-height: 500px;
     overflow: hidden;
     resize: none;
+}
+
+.hidden {
+    display: none;
+    white-space: pre-wrap;
+}
+
+
+/** Footer **/
+
+footer {
+    width: 100%;
+}
+
+footer  p {
+    margin: 50px 0;
+    font-size: 10px;
+    text-align: center;
+    color: #adadad;
+}
+
+footer a {
+    color: #adadad;
 }

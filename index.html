@@ -10,27 +10,26 @@
     <script type='text/javascript' src='js/jquery.min.js'></script>
     <!--<script type="text/javascript" src="js/audiojs/audio.min.js"></script>-->
     <script type="text/javascript" src="js/jwerty.js"></script>
-    <script type="text/javascript" src="js/jquery.typing-0.2.0.min.js"></script>
 
     <script type="text/javascript" src="js/mediacontroller.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </head>
 
 <body>
-<header>
-    <div id="buttonContainer">
-        <a class="logo">ts</a>
-        <a class="btn toggle" id="autosaveBtn">Autosave</a>
-        <a class="btn" onclick="selectTranscript();">Select Text</a>
+    <div class="chooser">
+        <div class="content">
+            <input id="audioChooser" type="file" accept="audio/*"/><button id="audioChooserBtn">Load Audio</button>
+        </div>
     </div>
-</header>
 
-<div class="container">
     <div class="source">
-        <div id="audioBar">
+        <div class="content" id="audioBar">
             <audio id="audioPlayer" controls preload="none"></audio>
         </div>
-        <ul id="commands" class="commands" data-key="alt">
+    </div>
+
+    <div class="side-content">
+        <ul class="commands" id="commands" data-key="alt">
             <li data-key="esc">Play/Pause</li>
             <li data-key="j">Jump Back</li>
             <li data-key="k">Jump Forward</li>
@@ -38,23 +37,20 @@
             <li data-key="i">Speed Up</li>
         </ul>
     </div>
-    
-    <div class="editor">
-        <input id="audioChooser" class="chooser" type="file" accept="audio/*"/><a href id="audioChooseNav"></a>
-        <div id="transcript">
+
+    <div class="transcript">
+        <div class="content">
             <input class="tTitle" placeholder="Title"/>
             <input class="tSubTitle" placeholder="Subtitle"/>
             <textarea class="tText" id="tBody" placeholder="[00:00:00] Start typing here - timestamps will take care of themselves..."></textarea>
         </div>
+        <div class="tText hidden"></div>
     </div>
-</div>
 
-<footer>
-    <div class="credits">
-        <p><a href="https://github.com/cmuellerrr/transcription-sucks/archive/master.zip">Download</a> for use offline.</p>
-        <p>Made by <a href="http://www.iammueller.com" target="_blank">Chris</a></p>
-    </div>    
-</footer>
-
+    <footer>
+        <div class="content">
+            <p>&mdash; Made by <a href="http://www.iammueller.com" target="_blank">Chris</a> &mdash;</p>
+        </div>    
+    </footer>
 </body>
 </html>

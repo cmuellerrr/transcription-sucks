@@ -1,30 +1,17 @@
-var sectionCount = 0,
-    controller,
-    storage;
+var controller;
 
 $(document).ready(function() {
     controller = mediaController($('#audioPlayer'));
 
+    initText();
     initCommands();
-    //loadFromLocalStorage();
-
-    //init ui bindings
-    $('.toggle').click(function(event) {
-        $(event.target).toggleClass("btn-active");
-    });
 
     //init chooser
     $('#audioChooser').change(loadFile);
-    $('#audioChooseNav').click(function(event) {
+    $('#audioChooserBtn').click(function(event) {
         $('#audioChooser').click();
         return false;
     });
-
-    //init event handlers
-    //$('.editor').typing({
-   //    stop: saveToLocalStorage,
-   //     delay: 2000
-   // });
 
     //check for special keystokes in the body
     $('#tBody').keypress(function(event) {
@@ -46,6 +33,19 @@ $(document).ready(function() {
         }
     });
 
+    function initText() {
+        var body = $('#tBody'),
+            hiddenBody = $('.tText.hidden'),
+            content = null;
+
+        body.keypress(function(event) {
+            content = $(this).val();
+            content = content.replace(/\n/g, '<br>');
+            hiddenBody.html(content + '<br class="lbr">');
+            $(this).css('height', hiddenBody.height());
+        });
+    }
+
     //init key bindings - remove default behavior first then add label
     function initCommands() {
         var ctxKey = $('#commands').attr('data-key');
@@ -57,7 +57,7 @@ $(document).ready(function() {
         jwerty.key(ctxKey + '+i', controller.speedup);
 
         $('#commands li').each(function() {
-            $(this).prepend('<b>' + ctxKey + ' + ' + this.getAttribute('data-key') + '</b> - ');
+            $(this).prepend(ctxKey + ' + ' + this.getAttribute('data-key') + ': ');
         });
     }
 });
@@ -102,60 +102,7 @@ var loadFile = function() {
     }
 };
 
-/*
- * Load the transcript from the browser's cache if it exists
- */
-var loadFromLocalStorage = function() {
-    //load from storage
-    if ('localStorage' in window && window['localStorage'] !== null) {
-        storage = window.localStorage;
-            
-        if(storage.getItem('transcript')) {
-            console.log("RESTORING FROM CACHE");
-
-            $('#transcript').html(storage['transcript']);
-            sectionCount = parseInt(storage['sectionCount'], 10);
-        }
-    }
-};
-
-/*
- * Save the transcript to the browser's cache
- */
-var saveToLocalStorage = function() {
-    if (storage && $("#autosaveBtn").hasClass('btn-active')) {
-        console.log("SAVING");
-        storage['transcript'] = $('#transcript').html();
-        storage['sectionCount'] = sectionCount;
-    }
-};
-
 /* Utilitiy Functions */
-
-/*
- * Select all of the transcript text. To aid copy/paste.
- * via Jason Edelman: http://stackoverflow.com/a/987376
- */
-var selectTranscript = function() {
-    var text = document.getElementById('transcript'),
-        range,
-        selection;
-
-    if (document.body.createTextRange) {
-        range = document.body.createTextRange();
-        
-        range.moveToElementText(text);
-        range.select();
-
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        
-        range.selectNodeContents(text);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
-};
 
 /*
  * Format the given number of seconds as hh:mm:ss
