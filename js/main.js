@@ -3,7 +3,6 @@ var controller;
 $(document).ready(function() {
     controller = mediaController($('#audioPlayer'));
 
-    initText();
     initCommands();
 
     //init chooser
@@ -14,8 +13,8 @@ $(document).ready(function() {
     });
 
     //check for special keystokes in the body
-    $('#tBody').keypress(function(event) {
-        var body = $('#tBody')[0];
+    $('#body').keypress(function(event) {
+        var body = this;
 
         //on enter
         if (event.keyCode == 13) {
@@ -31,20 +30,10 @@ $(document).ready(function() {
         else if (event.charCode && body.value.length === 0) {
             addTimestampAtCursor(controller.getTimestamp());
         }
+        else if (event.charCode) {
+            resizeBody();
+        }
     });
-
-    function initText() {
-        var body = $('#tBody'),
-            hiddenBody = $('.tText.hidden'),
-            content = null;
-
-        body.keypress(function(event) {
-            content = $(this).val();
-            content = content.replace(/\n/g, '<br>');
-            hiddenBody.html(content + '<br class="lbr">');
-            $(this).css('height', hiddenBody.height());
-        });
-    }
 
     //init key bindings - remove default behavior first then add label
     function initCommands() {
@@ -66,7 +55,7 @@ $(document).ready(function() {
 //post = text after end
 //body = pre + stamp + post
 var addTimestampAtCursor = function(time) {
-    var node = $('#tBody')[0],
+    var node = $('#body')[0],
         text = node.value,
         startPos = node.selectionStart,
         endPos = node.selectionEnd,
@@ -86,6 +75,18 @@ var addTimestampAtCursor = function(time) {
                  text.substring(endPos, text.length);
     node.selectionStart = startPos + stamp.length;
     node.selectionEnd = startPos + stamp.length;
+
+    resizeBody();
+};
+
+//resize the body textarea based off of the value of 
+//the special, hidden copy
+var resizeBody = function() {
+    var body = $('#body'),
+        hiddenBody = $('#hiddenBody');
+
+    hiddenBody.html(body.val().replace(/\n/g, '<br>'));
+    body.css('height', hiddenBody.height());
 };
 
 //handle the loading of source material

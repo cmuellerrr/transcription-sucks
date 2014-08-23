@@ -161,6 +161,7 @@ button:hover {
     font-family: 'Lora', Georgia, serif;
     font-size: 16px;
     line-height: 25px;
+    padding: 0;
     margin-bottom: 25px;
     min-height: 500px;
     overflow: hidden;
