@@ -1,7 +1,5 @@
-var controller;
-
 $(document).ready(function() {
-    controller = mediaController($('#audioPlayer'));
+    var controller = mediaController($('#audioPlayer'));
 
     initCommands();
 
@@ -39,15 +37,34 @@ $(document).ready(function() {
     function initCommands() {
         var ctxKey = $('#commands').attr('data-key');
 
+        jwerty.key('esc', false);
         jwerty.key('esc', controller.togglePlay);
+        jwerty.key(ctxKey + '+j', false);
         jwerty.key(ctxKey + '+j', controller.rewind);
+        jwerty.key(ctxKey + '+k', false);
         jwerty.key(ctxKey + '+k', controller.forward);
+        jwerty.key(ctxKey + '+u', false);
         jwerty.key(ctxKey + '+u', controller.slowdown);
+        jwerty.key(ctxKey + '+i', false);
         jwerty.key(ctxKey + '+i', controller.speedup);
 
         $('#commands li').each(function() {
             $(this).prepend(ctxKey + ' + ' + this.getAttribute('data-key') + ': ');
         });
+    }
+
+    //handle the loading of source material
+    function loadFile() {
+        var URL = window.webkitURL || window.URL,
+            url = URL.createObjectURL(this.files[0]);
+
+        if (url) {
+            controller.loadAudio(url);
+            $('.tTitle').focus();
+        }
+        else {
+            alert("Error loading audio file");
+        }
     }
 });
 
@@ -77,30 +94,18 @@ var addTimestampAtCursor = function(time) {
     node.selectionEnd = startPos + stamp.length;
 
     resizeBody();
+    window.scrollBy(0, 50);
 };
 
-//resize the body textarea based off of the value of 
-//the special, hidden copy
+//resize the body textarea based off of the content within it
+//copy over the text to a hidden div so we can get its size
+//then set the text area to that size
 var resizeBody = function() {
     var body = $('#body'),
         hiddenBody = $('#hiddenBody');
 
     hiddenBody.html(body.val().replace(/\n/g, '<br>'));
     body.css('height', hiddenBody.height());
-};
-
-//handle the loading of source material
-var loadFile = function() {
-    var URL = window.webkitURL || window.URL,
-        url = URL.createObjectURL(this.files[0]);
-
-    if (url) {
-        controller.loadAudio(url);
-        $('.tTitle').focus();
-        
-    } else {
-        alert("Error loading audio file");
-    }
 };
 
 /* Utilitiy Functions */
