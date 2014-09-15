@@ -22,7 +22,8 @@ $(document).ready(function() {
         });
 
     $('#seek').on("mousedown", function(event) {
-        controller.jumpToPercentage(event.offsetX / $(this).width());
+        var offX  = (event.offsetX || event.pageX - $(event.target).offset().left);
+        controller.jumpToPercentage(offX / $(this).width());
     });
 
     playButton.on("click", function(event) {
@@ -63,7 +64,7 @@ $(document).ready(function() {
 
     //init key bindings - remove default behavior first then add label
     function initCommands() {
-        var ctxKey = $('#commands').attr('data-key');
+        var ctxKey = "alt";
 
         jwerty.key('esc', false);
         jwerty.key('esc', controller.togglePlay);
@@ -75,10 +76,6 @@ $(document).ready(function() {
         jwerty.key(ctxKey + '+u', controller.slowdown);
         jwerty.key(ctxKey + '+i', false);
         jwerty.key(ctxKey + '+i', controller.speedup);
-
-        $('#commands li').each(function() {
-            $(this).prepend(ctxKey + ' + ' + this.getAttribute('data-key') + ': ');
-        });
     }
 
     //handle the loading of source material

@@ -63,6 +63,7 @@ var mediaController = function(args) {
         //Jump to the given percentage
         jumpToPercentage: function(percent) {
             this.jumpToSecond(media.duration * percent);
+            return false;
         },
 
         //Increase the current playback speed by the set delta
