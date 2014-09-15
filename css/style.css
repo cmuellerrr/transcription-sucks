@@ -64,6 +64,61 @@ button:hover {
 }
 
 
+/** Audio Player **/
+
+.ap-wrapper {
+    width: 650px;
+    height: 20px;
+}
+
+.ap-button-wrapper {
+    display: inline-block;
+    color: #7e3c82;
+}
+
+.ap-button-wrapper i {
+    display: block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+}
+
+.ap-seek-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 555px;
+    height: 100%;
+}
+
+.ap-duration, .ap-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    margin: 8px 0 5px 0;
+}
+
+.ap-duration {
+    width: 100%;
+    background-color: #c0c0c0;
+}
+
+.ap-progress {
+    max-width: 100%;
+    background-color: #7e3c82;
+    border-right: 2px solid white;
+}
+
+.ap-time {
+    display: inline-block;
+    font-size: 14px;
+    color: #7e3c82;
+}
+
+.disabled {
+    color: #c0c0c0;
+}
+
 /** General **/
 
 .content {

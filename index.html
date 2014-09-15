@@ -5,12 +5,12 @@
 	<meta name="description" content="Transcription Sucks. Here's a tool trying to make it slightly less awful. Free, open, and even available to download and use offline." />
 
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Lora:400,700' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type='text/css'>
 
 	<link rel="stylesheet" href="css/reset.css" type="text/css" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 
     <script type='text/javascript' src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
-    <!--<script type="text/javascript" src="js/audiojs/audio.min.js"></script>-->
     <script type="text/javascript" src="js/jwerty.js"></script>
 
     <script type="text/javascript" src="js/mediacontroller.js"></script>
@@ -26,7 +26,16 @@
 
     <div class="source">
         <div class="content" id="audioBar">
-            <audio id="audioPlayer" controls preload="none"></audio>
+            <div class="ap-wrapper">
+                <div class="ap-button-wrapper">
+                    <i class="fa fa-play disabled" id="play-pause"></i>
+                </div>
+                <div class="ap-seek-wrapper" id="seek">
+                    <div class="ap-duration" id="duration"></div>
+                    <div class="ap-progress" id="progress"></div>
+                </div>
+                <div class="ap-time disabled" id="time">00:00:00</div>
+            </div>
         </div>
     </div>
 

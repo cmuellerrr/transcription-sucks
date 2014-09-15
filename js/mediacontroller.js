@@ -1,9 +1,14 @@
 //The media controller object
-var mediaController = function(element) {
+var mediaController = function(args) {
     var seekDelta = 2,
         rateDelta = 0.2,
         jumpBuffer = 0.5,
-        media = element[0];
+        media = new Audio();
+
+    media.oncanplay = args.oncanplay || media.oncanplay;
+    media.onplaying = args.onplaying || media.onplaying;
+    media.onpause = args.onpause || media.onpause;
+    media.ontimeupdate = args.ontimeupdate || media.ontimeupdate;
 
     return {
         //Load the given audio file into the controller
@@ -47,12 +52,17 @@ var mediaController = function(element) {
             return false;
         },
 
-        //Jump to the given location.
-        jumpTo: function(time) {
+        //Jump to the given second.
+        jumpToSecond: function(time) {
             console.log("JUMP");
             if (time >= jumpBuffer) time -= jumpBuffer;
             if (media.duration >= time) media.currentTime = time;
             return false;
+        },
+
+        //Jump to the given percentage
+        jumpToPercentage: function(percent) {
+            this.jumpToSecond(media.duration * percent);
         },
 
         //Increase the current playback speed by the set delta

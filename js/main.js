@@ -1,5 +1,33 @@
 $(document).ready(function() {
-    var controller = mediaController($('#audioPlayer'));
+    var playButton = $('#play-pause'),
+        playTime = $('#time'),
+        controller = mediaController({
+            oncanplay: function(event) {
+                playButton.removeClass('disabled');
+                playTime.removeClass('disabled');
+            },
+
+            onplaying: function(event) {
+                playButton.addClass('fa-pause').removeClass('fa-play');
+            },
+                    
+            onpause: function(event) {
+                playButton.addClass('fa-play').removeClass('fa-pause');
+            },
+
+            ontimeupdate: function(event) {
+                playTime.text(formatSeconds(this.currentTime));
+                $('#progress').width(((this.currentTime / this.duration) * 100) + "%");
+            }
+        });
+
+    $('#seek').on("mousedown", function(event) {
+        controller.jumpToPercentage(event.offsetX / $(this).width());
+    });
+
+    playButton.on("click", function(event) {
+        controller.togglePlay();
+    });
 
     initCommands();
 
@@ -68,6 +96,8 @@ $(document).ready(function() {
     }
 });
 
+/* Utilitiy Functions */
+
 //pre = text before start
 //post = text after end
 //body = pre + stamp + post
@@ -108,16 +138,20 @@ var resizeBody = function() {
     body.css('height', hiddenBody.height());
 };
 
-/* Utilitiy Functions */
-
-/*
- * Format the given number of seconds as hh:mm:ss
- */
+//Format the given number as a timestamp [hh:mm:ss]
 var formatSecondsAsTimestamp = function(secs) {
+    return '[' + formatSeconds(secs) + ']';
+};
+
+// Format the given number of seconds as hh:mm:ss
+var formatSeconds = function(secs) {
     var hr  = Math.floor(secs / 3600),
         min = Math.floor((secs - (hr * 3600))/60),
         sec = Math.floor(secs - (hr * 3600) -  (min * 60));
 
+    if (hr < 10) {
+        hr = "0" + hr;
+    }
     if (min < 10) {
       min = "0" + min;
     }
@@ -125,5 +159,5 @@ var formatSecondsAsTimestamp = function(secs) {
       sec  = "0" + sec;
     }
 
-    return '[' + hr + ':' + min + ':' + sec + ']';
+    return hr + ':' + min + ':' + sec;
 };
