@@ -5,6 +5,7 @@ var mediaController = function(args) {
         jumpBuffer = 0.5,
         media = new Audio();
 
+    //set the event handlers if populated in args
     media.oncanplay = args.oncanplay || media.oncanplay;
     media.onplaying = args.onplaying || media.onplaying;
     media.onpause = args.onpause || media.onpause;

@@ -30,17 +30,45 @@ $(document).ready(function() {
         controller.togglePlay();
     });
 
-    initCommands();
-
     //init chooser
-    $('#audioChooser').change(loadFile);
     $('#audioChooserBtn').click(function(event) {
         $('#audioChooser').click();
         return false;
     });
+    $('#audioChooser').change(loadFile);
 
-    //check for special keystokes in the body
-    $('#body').keypress(function(event) {
+    //add handlers for controlling the audio
+    $('body').on('keydown', function(event) {
+        var key = event.keyCode || event.which;
+        var keychar = String.fromCharCode(key);
+
+        //not sure why keychar is always uppercase
+        if (event.ctrlKey) {
+            if (keychar == 'H') {
+                controller.slowdown();
+                return false;
+            }
+            else if (keychar == 'J') {
+                controller.rewind();
+                return false;
+            }
+            else if (keychar == 'K') {
+                controller.forward();
+                return false;
+            }
+            else if (keychar == 'L') {
+                controller.speedup();
+                return false;
+            }
+        }
+        else if (key == 27) { //escape
+            controller.togglePlay();
+            return false;
+        }
+    });
+
+    //add handlers for adding timestamps
+    $('#body').on('keypress', function(event) {
         var body = this;
 
         //on enter
@@ -61,22 +89,6 @@ $(document).ready(function() {
             resizeBody();
         }
     });
-
-    //init key bindings - remove default behavior first then add label
-    function initCommands() {
-        var ctxKey = "alt";
-
-        jwerty.key('esc', false);
-        jwerty.key('esc', controller.togglePlay);
-        jwerty.key(ctxKey + '+j', false);
-        jwerty.key(ctxKey + '+j', controller.rewind);
-        jwerty.key(ctxKey + '+k', false);
-        jwerty.key(ctxKey + '+k', controller.forward);
-        jwerty.key(ctxKey + '+u', false);
-        jwerty.key(ctxKey + '+u', controller.slowdown);
-        jwerty.key(ctxKey + '+i', false);
-        jwerty.key(ctxKey + '+i', controller.speedup);
-    }
 
     //handle the loading of source material
     function loadFile() {
