@@ -5,7 +5,7 @@
 }
 
 html, body {
-    height: 100%;
+    height: 100%
 }
 
 body {
@@ -64,11 +64,26 @@ button:hover {
 }
 
 
+/** General **/
+
+.content {
+    position: relative;
+    width: 650px;
+    margin: auto;
+}
+
+.fixed {
+    position: fixed !important;
+    z-index: 1070;
+    top: 0;
+}
+
+
 /** Audio Player **/
 
 .ap-wrapper {
     width: 650px;
-    height: 20px;
+    height: 25px;
 }
 
 .ap-button-wrapper {
@@ -95,7 +110,7 @@ button:hover {
     top: 0;
     left: 0;
     height: 10px;
-    margin: 8px 0 5px 0;
+    margin: 12px 0 5px 0;
 }
 
 .ap-duration {
@@ -119,14 +134,6 @@ button:hover {
     color: #c0c0c0;
 }
 
-/** General **/
-
-.content {
-    position: relative;
-    width: 650px;
-    margin: auto;
-}
-
 
 /** The chooser**/
 
@@ -146,14 +153,9 @@ button:hover {
 
 .source {
     width: 100%;
-}
-
-#audioBar {
-    height: 40px;
-}
-
-#audioPlayer {
-    width: 100%;
+    height: 35px;
+    margin-bottom: 5px;
+    background-color: #f5f5f5;
 }
 
 
@@ -161,7 +163,7 @@ button:hover {
 
 .side-content {
     position: relative;
-    width: 930px;
+    width: 950px;
     margin: auto;
 }
 
@@ -188,7 +190,7 @@ button:hover {
     box-shadow: 0 1px 1px #bbbbbb;
 }
 
-.tTitle, .tSubTitle, .tText {
+.tTitle, .tSubtitle, .tText {
     display: block;
     margin: 0;
     border: 0;
@@ -202,7 +204,7 @@ button:hover {
     margin-bottom: 8px;
 }
 
-.tSubTitle {
+.tSubtitle {
     font-size: 20px;
     font-style: italic;
     margin-bottom: 50px;

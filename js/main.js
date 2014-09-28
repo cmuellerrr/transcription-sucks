@@ -35,10 +35,22 @@ $(document).ready(function() {
         $('#audioChooser').click();
         return false;
     });
-    $('#audioChooser').change(loadFile);
+    //handle the loading of source material
+    $('#audioChooser').change(function(event) {
+        var URL = window.webkitURL || window.URL,
+            url = URL.createObjectURL(this.files[0]);
+
+        if (url) {
+            controller.loadAudio(url);
+            $('.tTitle').focus();
+        }
+        else {
+            alert("Error loading audio file");
+        }
+    });
 
     //add handlers for controlling the audio
-    $('body').on('keydown', function(event) {
+    $(window).on('keydown', function(event) {
         var key = event.keyCode || event.which;
         var keychar = String.fromCharCode(key);
 
@@ -68,7 +80,7 @@ $(document).ready(function() {
     });
 
     //add handlers for adding timestamps
-    $('#body').on('keypress', function(event) {
+    $('#text').on('keypress', function(event) {
         var body = this;
 
         //on enter
@@ -90,19 +102,17 @@ $(document).ready(function() {
         }
     });
 
-    //handle the loading of source material
-    function loadFile() {
-        var URL = window.webkitURL || window.URL,
-            url = URL.createObjectURL(this.files[0]);
+    
+    var srcPosition = $('#source').position().top;
 
-        if (url) {
-            controller.loadAudio(url);
-            $('.tTitle').focus();
+    $(window).scroll(function(event) {
+        if($(window).scrollTop() >= srcPosition) {
+            $('#source').addClass("fixed");
+        } else {
+            $('#source').removeClass("fixed");
         }
-        else {
-            alert("Error loading audio file");
-        }
-    }
+    });
+    
 });
 
 /* Utilitiy Functions */
@@ -111,7 +121,7 @@ $(document).ready(function() {
 //post = text after end
 //body = pre + stamp + post
 var addTimestampAtCursor = function(time) {
-    var node = $('#body')[0],
+    var node = $('#text')[0],
         text = node.value,
         startPos = node.selectionStart,
         endPos = node.selectionEnd,
@@ -140,8 +150,8 @@ var addTimestampAtCursor = function(time) {
 //copy over the text to a hidden div so we can get its size
 //then set the text area to that size
 var resizeBody = function() {
-    var body = $('#body'),
-        hiddenBody = $('#hiddenBody');
+    var body = $('#text'),
+        hiddenBody = $('#hiddenText');
 
     hiddenBody.html(body.val().replace(/\n/g, '<br>'));
     body.css('height', hiddenBody.height());
