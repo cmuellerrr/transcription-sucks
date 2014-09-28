@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var playButton = $('#play-pause'),
         playTime = $('#time'),
-        controller = mediaController({
+        controller = audioController({
             oncanplay: function(event) {
                 playButton.removeClass('disabled');
                 playTime.removeClass('disabled');

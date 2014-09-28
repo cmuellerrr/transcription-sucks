@@ -1,5 +1,5 @@
-//The media controller object
-var mediaController = function(args) {
+//The audio controller object
+var audioController = function(args) {
     var seekDelta = 2,
         rateDelta = 0.2,
         jumpBuffer = 0.5,

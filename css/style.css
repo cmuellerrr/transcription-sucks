@@ -81,31 +81,31 @@ button:hover {
 
 /** Audio Player **/
 
-.ap-wrapper {
+.player-wrapper {
     width: 650px;
     height: 25px;
 }
 
-.ap-button-wrapper {
+.player-button-wrapper {
     display: inline-block;
     color: #7e3c82;
 }
 
-.ap-button-wrapper i {
+.player-button-wrapper i {
     display: block;
     width: 20px;
     height: 20px;
     font-size: 20px;
 }
 
-.ap-seek-wrapper {
+.player-seek-wrapper {
     display: inline-block;
     position: relative;
     width: 555px;
     height: 100%;
 }
 
-.ap-duration, .ap-progress {
+.player-duration, .player-progress {
     position: absolute;
     top: 0;
     left: 0;
@@ -113,18 +113,18 @@ button:hover {
     margin: 12px 0 5px 0;
 }
 
-.ap-duration {
+.player-duration {
     width: 100%;
     background-color: #c0c0c0;
 }
 
-.ap-progress {
+.player-progress {
     max-width: 100%;
     background-color: #7e3c82;
     border-right: 2px solid white;
 }
 
-.ap-time {
+.player-time {
     display: inline-block;
     font-size: 14px;
     color: #7e3c82;
@@ -137,13 +137,13 @@ button:hover {
 
 /** The chooser**/
 
-#audioChooser {
+.chooser input {
     opacity: 0;
     position: absolute;
     top: -40px;
 }
 
-#audioChooserBtn {
+.chooser button {
     margin: 40px auto;
     width: 115px;
 }
