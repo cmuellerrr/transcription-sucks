@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+	<title>Transcription Sucks</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Transcription Sucks. Here's a tool trying to make it slightly less awful." />
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700|Lora:400,700' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css" type="text/css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <script type='text/javascript' src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+
+    <script type="text/javascript" src="js/audiocontroller.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+    <div class="chooser">
+        <div class="content">
+            <input id="audioChooser" type="file" accept="audio/*"/><button id="audioChooserBtn">Load Audio</button>
+        </div>
+    </div>
+
+    <div class="source" id="source">
+        <div class="content">
+            <div class="player-wrapper">
+                <div class="player-button-wrapper">
+                    <i class="fa fa-play disabled" id="play-pause"></i>
+                </div>
+                <div class="player-seek-wrapper" id="seek">
+                    <div class="player-duration" id="duration"></div>
+                    <div class="player-progress" id="progress"></div>
+                </div>
+                <div class="player-time disabled" id="time">00:00:00</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-content">
+        <ul class="commands">
+            <li>esc: Play/Pause</li>
+            <li>ctrl + h: Slow Down</li>
+            <li>ctrl + j: Jump Back</li>
+            <li>ctrl + k: Jump Forward</li>
+            <li>ctrl + l: Speed Up</li>
+            <li>enter: Timestamp</li>
+        </ul>
+    </div>
+
+    <div class="transcript">
+        <div class="content">
+            <input class="tTitle" placeholder="Title"/>
+            <input class="tSubtitle" placeholder="Subtitle"/>
+            <textarea class="tText" id="text" placeholder="[00:00:00] Start typing here - timestamps will take care of themselves..."></textarea>
+            <div class="tText hidden" id="hiddenText"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="content">
+            <p>&mdash; <a href="https://github.com/cmuellerrr/transcription-sucks" target="_blank">Made by Chris</a> &mdash;</p>
+        </div>    
+    </footer>
+</body>
+</html>
