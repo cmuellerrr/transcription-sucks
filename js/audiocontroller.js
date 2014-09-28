@@ -36,21 +36,18 @@ var audioController = function(args) {
                 console.log("PAUSE");
                 media.pause();
             }
-            return false;
         },
 
         //Fast forward the current media by the set delta.
         forward: function() {
             console.log("FF");
             media.currentTime += seekDelta;
-            return false;
         },
 
         //Rewind the current media by the set delta.
         rewind: function() {
             console.log("RW");
             media.currentTime -= seekDelta;
-            return false;
         },
 
         //Jump to the given second.
@@ -58,13 +55,11 @@ var audioController = function(args) {
             console.log("JUMP");
             if (time >= jumpBuffer) time -= jumpBuffer;
             if (media.duration >= time) media.currentTime = time;
-            return false;
         },
 
         //Jump to the given percentage
         jumpToPercentage: function(percent) {
             this.jumpToSecond(media.duration * percent);
-            return false;
         },
 
         //Increase the current playback speed by the set delta
@@ -73,7 +68,6 @@ var audioController = function(args) {
             if (media.playbackRate <= (2.0 - rateDelta)) {
                 media.playbackRate += rateDelta;
             }
-            return false;
         },
 
         //Decrease the current playback speed by the set delta
@@ -82,7 +76,6 @@ var audioController = function(args) {
             if (media.playbackRate >= (0.5 + rateDelta)) {
                 media.playbackRate -= rateDelta;
             }
-            return false;
         },
         
         //Get the current time stamp of the playing media.
