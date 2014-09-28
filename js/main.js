@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    var playButton = $('#play-pause'),
+    var srcPosition = $('#source').position().top,
+        playButton = $('#play-pause'),
         playTime = $('#time'),
         controller = audioController({
             oncanplay: function(event) {
@@ -21,22 +22,26 @@ $(document).ready(function() {
             }
         });
 
+    //toggle play/pause if you click on the play/pause button
+    playButton.on("click", function(event) {
+        controller.togglePlay();
+    });
+
+    //update the audio position when you click on the seek bar
     $('#seek').on("mousedown", function(event) {
         var offX  = (event.offsetX || event.pageX - $(event.target).offset().left);
         controller.jumpToPercentage(offX / $(this).width());
     });
 
-    playButton.on("click", function(event) {
-        controller.togglePlay();
-    });
-
-    //init chooser
-    $('#audioChooserBtn').click(function(event) {
+    //fire the file chooser when you click on the load button
+    $('#audioChooserBtn').on("click", function(event) {
         $('#audioChooser').click();
         return false;
     });
-    //handle the loading of source material
-    $('#audioChooser').change(function(event) {
+
+    //load the source material when a file is selected
+    //TODO report errors and incompatibilities
+    $('#audioChooser').on("change", function(event) {
         var URL = window.webkitURL || window.URL,
             url = URL.createObjectURL(this.files[0]);
 
@@ -49,7 +54,16 @@ $(document).ready(function() {
         }
     });
 
-    //add handlers for controlling the audio
+    //fix the source bar to the top of the page if you scroll beyond it
+    $(window).on("scroll", function(event) {
+        if($(window).scrollTop() >= srcPosition) {
+            $('#source').addClass("fixed");
+        } else {
+            $('#source').removeClass("fixed");
+        }
+    });
+
+    //add hotkeys for controlling the audio
     $(window).on('keydown', function(event) {
         var key = event.keyCode || event.which;
         var keychar = String.fromCharCode(key);
@@ -79,7 +93,8 @@ $(document).ready(function() {
         }
     });
 
-    //add handlers for adding timestamps
+    //add hotkey for adding timestamps.
+    //include some special logic for when you are first starting out.
     $('#text').on('keypress', function(event) {
         var body = this;
 
@@ -94,32 +109,23 @@ $(document).ready(function() {
             addTimestampAtCursor(controller.getTimestamp());
             return false;
         }
+        //add a timestamp if you just start typing
         else if (event.charCode && body.value.length === 0) {
             addTimestampAtCursor(controller.getTimestamp());
         }
+        //make sure the textarea resizes when text is entered
         else if (event.charCode) {
             resizeBody();
         }
     });
-
-    
-    var srcPosition = $('#source').position().top;
-
-    $(window).scroll(function(event) {
-        if($(window).scrollTop() >= srcPosition) {
-            $('#source').addClass("fixed");
-        } else {
-            $('#source').removeClass("fixed");
-        }
-    });
-    
 });
 
 /* Utilitiy Functions */
 
-//pre = text before start
-//post = text after end
-//body = pre + stamp + post
+//Add a timestamp, including newlines, at the cursor position.
+//Handle special cases where enter is pressed while in the middle 
+//of a sentence or if you've selevted a range.
+//TODO inefficient to get the node each time
 var addTimestampAtCursor = function(time) {
     var node = $('#text')[0],
         text = node.value,
@@ -127,15 +133,19 @@ var addTimestampAtCursor = function(time) {
         endPos = node.selectionEnd,
         stamp = formatSecondsAsTimestamp(time) + ' ';
 
+    //dont add newline on the first timestamp
     if (text.length > 0) {
         stamp = '\n\n' + stamp;
     }
 
+    //if a range is selected, check its direction
     if (node.selectionDirection === "backwards") {
         startPos = endPos;
         endPos = node.selectionStart;
     }
 
+    //put the timestamp at the cursor position and place the cursor
+    //after the timestamp
     node.value = text.substring(0, startPos) +
                  stamp +
                  text.substring(endPos, text.length);
@@ -146,9 +156,10 @@ var addTimestampAtCursor = function(time) {
     window.scrollBy(0, 50);
 };
 
-//resize the body textarea based off of the content within it
-//copy over the text to a hidden div so we can get its size
-//then set the text area to that size
+//Resize the body textarea based off of the content within it.
+//Copy over the text to a hidden div so we can get its size
+//then set the text area to that size.
+//TODO inefficient to get the elements each time
 var resizeBody = function() {
     var body = $('#text'),
         hiddenBody = $('#hiddenText');

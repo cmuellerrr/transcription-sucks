@@ -1,14 +1,16 @@
 Transcription Sucks
 =========
 
-Let's try to make it slightly less shitty.
+This is a simple project where I try to make transcription slightly less shitty.
 
-NOTE: Use Chrome. There are currently some bugs that prevent it from being fully functional in other browsers.
+Instead of switching between applications or using special peripherals, use hotkeys on a web page to alter audio playback while keeping focus on the text you are writing.
 
-Use hotkeys to alter audio playback.
-Newlines create timestamps automatically - timestamps act as links which jump the audio to that time.
+Control audio playback with the following hotkeys:
 
-Use the Autosave toggle to save your progress to your browser's local cache.
-Ues the Select Text button to select text so you can paste it into Word or whatever you wish.
+* Toggle pause/play: `esc`
+* Slow down playback: `ctrl + h`
+* Jump back 2 seconds: `ctrl + j`
+* Jump forward 2 seconds: `ctrl + k`
+* Speed up playback: `ctrl + l`
+* Add a timestamp: `enter`
 
-You can download to use completely offline. Like, when you're on a plane and in grad school and don't want to pay for wifi.
