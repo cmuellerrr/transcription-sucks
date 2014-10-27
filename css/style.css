@@ -38,9 +38,9 @@ button {
     -moz-border-radius: 4px; /* Firefox 1-3.6 */
     border-radius: 4px; /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
 
-    -webkit-box-shadow: 0 2px 0 1px #329feb;
-    -moz-box-shadow: 0 2px 0 1px #329feb;
-    box-shadow: 0 2px 0 1px #329feb;
+    -webkit-box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
+    -moz-box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
+    box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
 
     color: white;
     font-weight: 700;
