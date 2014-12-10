@@ -72,10 +72,6 @@ button:hover {
     font-size: 12px;
     font-family: sans-serif;
     color: #777;
-<<<<<<< HEAD
-}
-
-=======
 
     -webkit-transition: all .05s;
     -moz-transition: all .05s;
@@ -89,7 +85,6 @@ button:hover {
     box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
     color: white;
 }
->>>>>>> master
 
 /** Make placeholder text consistent **/
 
