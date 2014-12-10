@@ -72,8 +72,24 @@ button:hover {
     font-size: 12px;
     font-family: sans-serif;
     color: #777;
+<<<<<<< HEAD
 }
 
+=======
+
+    -webkit-transition: all .05s;
+    -moz-transition: all .05s;
+    transition: all .05s;
+}
+
+.highlight .key {
+    background: #51b5fc;
+    -webkit-box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
+    -moz-box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
+    box-shadow: 0 2px 0 1px #329feb, 0 2px 3px #444;
+    color: white;
+}
+>>>>>>> master
 
 /** Make placeholder text consistent **/
 
@@ -261,6 +277,9 @@ button:hover {
     white-space: pre-wrap;
 }
 
+#hiddenText {
+    padding: 20px;
+}
 
 /** Footer **/
 
