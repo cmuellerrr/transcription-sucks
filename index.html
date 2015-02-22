@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" />
 
     <script type='text/javascript' src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+    <script type="text/javascript" src="js/jquery.typing-0.2.0.min.js"></script>
 
     <script type="text/javascript" src="js/audiocontroller.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
@@ -56,22 +57,27 @@
             <li id="cmd-ff"><a class="key">ctrl</a> + <a class="key">k</a> <a class="command">Jump Forward</a></li>
             <li id="cmd-faster"><a class="key">ctrl</a> + <a class="key">l</a> <a class="command">Speed Up</a></li>
             <li id="cmd-stamp"><a class="key">enter</a> <a class="command">Timestamp</a></li>
+            <li><input id="cmd-save" type="checkbox" name="autosave"> <a class="command">Autosave</a></li>
         </ul>
     </div>
 
     <div class="transcript">
         <div class="content">
-            <input class="tTitle" placeholder="Title"/>
-            <input class="tSubtitle" placeholder="Subtitle"/>
-            <textarea class="tText" id="text" placeholder="[00:00:00] Start typing here - timestamps will take care of themselves..."></textarea>
+            <input class="tTitle saved" id="title" placeholder="Title"/>
+            <input class="tSubtitle saved" id="subtitle" placeholder="Subtitle"/>
+            <textarea class="tText saved" id="text" placeholder="[00:00:00] Start typing here - timestamps will take care of themselves..."></textarea>
             <div class="tText hidden" id="hiddenText"></div>
         </div>
+    </div>
+
+    <div class="save-info content">
+        <p id="save-status">Not saved. Check 'Autosave' to automatically save your work.</p>
     </div>
 
     <footer>
         <div class="content">
             <p>&mdash; <a href="https://github.com/cmuellerrr/transcription-sucks" target="_blank">This is open source</a> &mdash;</p>
-        </div>    
+        </div>
     </footer>
 </body>
 </html>

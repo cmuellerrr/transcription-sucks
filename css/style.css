@@ -1,4 +1,4 @@
-* { 
+* {
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
@@ -93,15 +93,15 @@ button:hover {
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: #c0c0c0;  
+   color: #c0c0c0;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #c0c0c0;  
+   color: #c0c0c0;
 }
 
-:-ms-input-placeholder {  
-   color: #c0c0c0;  
+:-ms-input-placeholder {
+   color: #c0c0c0;
 }
 
 
@@ -274,6 +274,11 @@ button:hover {
 
 #hiddenText {
     padding: 20px;
+}
+
+.save-info {
+    margin-top: 10px;
+    color: #c0c0c0;
 }
 
 /** Footer **/
