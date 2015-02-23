@@ -25,6 +25,8 @@ $(document).ready(function () {
 
     loadFromLocalStorage();
 
+    $('#cmd-save').on("change", saveToLocalStorage);
+
     //toggle play/pause if you click on the play/pause button
     playButton.on("click", function (event) {
         controller.togglePlay();
