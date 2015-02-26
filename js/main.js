@@ -48,14 +48,21 @@ $(document).ready(function () {
     //TODO report errors and incompatibilities
     $('#audioChooser').on("change", function (event) {
         var URL = window.webkitURL || window.URL,
+            url;
+
+        if (URL) {
             url = URL.createObjectURL(this.files[0]);
 
-        if (url) {
-            controller.loadAudio(url);
-            $('#title').focus();
+            if (url) {
+                controller.loadAudio(url);
+                $('#title').focus();
+            }
+            else {
+                alert("Error loading audio file.");
+            }
         }
         else {
-            alert("Error loading audio file");
+            alert("Your browser does not natively support loading audio files. Try updating to the latest version or switching to a new browser. *cough* Chrome *cough*");
         }
     });
 
@@ -203,6 +210,11 @@ $(document).ready(function () {
 
                 resizeBody();
             }
+        }
+        //localstorage not supported
+        else {
+            $("#cmd-save").attr("disabled", true);
+            $('#save-status').text("Your browser does not support saving to localstorage. Try updating to the latest version.");
         }
     }
 

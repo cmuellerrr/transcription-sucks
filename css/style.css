@@ -130,6 +130,7 @@ button:hover {
 .player-button-wrapper {
     display: inline-block;
     color: #51b5fc;
+    cursor: pointer;
 }
 
 .player-button-wrapper i {
@@ -144,6 +145,7 @@ button:hover {
     position: relative;
     width: 555px;
     height: 100%;
+    cursor: pointer;
 }
 
 .player-duration, .player-progress {
